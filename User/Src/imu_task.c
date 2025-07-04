@@ -107,22 +107,23 @@ void CalculateVelocity(float accel_world[3], float velocity[3])
 }
 
 /**
- * @brief Calculate projected gravity components in world frame (-1 to 1 scale)
+ * @brief Calculate projected gravity components in robot frame, independent of yaw rotation
  * @param quat: Quaternion [w, x, y, z] representing current orientation
- * @param gravity_projected: Output projected gravity [x, y, z] in world frame
- * @note When robot is upright, gravity_projected[2] = -1 (gravity points down)
+ * @param gravity_projected: Output projected gravity [x, y, z] in robot frame
+ * @note This gives gravity direction in robot frame, unaffected by yaw rotation
  */
 void CalculateProjectedGravity(float quat[4], float gravity_projected[3])
 {
-    float q0 = quat[0], q1 = quat[1], q2 = quat[2], q3 = quat[3];
+    // Extract pitch and roll angles from quaternion, ignoring yaw
+    float pitch = asinf(-2.0f*(quat[1]*quat[3] - quat[0]*quat[2]));
+    float roll = atan2f(2.0f*(quat[0]*quat[1] + quat[2]*quat[3]), 2.0f*(quat[0]*quat[0] + quat[3]*quat[3]) - 1.0f);
     
-    // Gravity vector in body frame is [0, 0, -1] (pointing down relative to body)
-    // Transform this to world frame using quaternion rotation matrix
-    // Since gravity_body = [0, 0, -1], we only need the third column of rotation matrix
-    
-    gravity_projected[0] = 2*(q1*q3 + q0*q2);      // X component of gravity in world frame
-    gravity_projected[1] = 2*(q2*q3 - q0*q1);      // Y component of gravity in world frame  
-    gravity_projected[2] = 2*(q1*q1 + q2*q2) - 1;  // Z component of gravity in world frame
+    // Calculate gravity vector in robot frame using only pitch and roll
+    // When robot is level: gravity = [0, 0, -1]
+    // When robot tilts: gravity components change based on tilt angles
+    gravity_projected[0] = sinf(pitch);           // X component (forward/backward tilt)
+    gravity_projected[1] = -sinf(roll) * cosf(pitch);  // Y component (left/right tilt)  
+    gravity_projected[2] = -cosf(pitch) * cosf(roll);  // Z component (up/down)
 }
 
 /* USER CODE BEGIN Header_ImuTask_Entry */

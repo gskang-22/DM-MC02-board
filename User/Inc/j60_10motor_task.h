@@ -8,6 +8,6 @@
 #ifndef INC_J60_10MOTOR_TASK_H_
 #define INC_J60_10MOTOR_TASK_H_
 
-
+void j60_10_TASK(void);
 
 #endif /* INC_J60_10MOTOR_TASK_H_ */

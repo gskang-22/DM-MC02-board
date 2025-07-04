@@ -4,4 +4,4 @@
 ../User/Src/imu_task.c:59:6:TransformAccelToWorldFrame	1
 ../User/Src/imu_task.c:90:6:CalculateVelocity	1
 ../User/Src/imu_task.c:115:6:CalculateProjectedGravity	1
-../User/Src/imu_task.c:135:6:ImuTask_Entry	4
+../User/Src/imu_task.c:136:6:ImuTask_Entry	4

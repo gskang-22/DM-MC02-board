@@ -35,7 +35,9 @@ BSP/Src/bsp_fdcan.o: ../BSP/Src/bsp_fdcan.c \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- ../Core/Inc/fdcan.h ../Core/Inc/main.h
+ ../Core/Inc/fdcan.h ../Core/Inc/main.h \
+ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/j60_10.h \
+ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/j60_10motor_task.h
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/bsp_fdcan.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
@@ -75,3 +77,5 @@ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/bsp_fdcan.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
 ../Core/Inc/fdcan.h:
 ../Core/Inc/main.h:
+C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/j60_10.h:
+C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/j60_10motor_task.h:

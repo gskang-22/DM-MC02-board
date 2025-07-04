@@ -54,10 +54,9 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/pc_mcu_uart.h \
  ../Core/Inc/usart.h ../Core/Inc/main.h \
  C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/imu_task.h \
- C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/bsp_fdcan.h \
- ../Core/Inc/fdcan.h \
  C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/buzzer_task.h \
- C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/buzzer.h
+ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/buzzer.h \
+ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/j60_10motor_task.h
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -115,7 +114,6 @@ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/pc_mcu_uart.
 ../Core/Inc/usart.h:
 ../Core/Inc/main.h:
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/imu_task.h:
-C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/bsp_fdcan.h:
-../Core/Inc/fdcan.h:
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/buzzer_task.h:
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/buzzer.h:
+C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/j60_10motor_task.h:

@@ -1,0 +1,4 @@
+../BSP/Src/j60_10.c:12:6:Enable_J60_Motor	24	static
+../BSP/Src/j60_10.c:35:6:Init_J60_Motor	16	static
+../BSP/Src/j60_10.c:77:6:Send_J60_Motor_Command	40	static
+../BSP/Src/j60_10.c:135:6:J60_Process_Feedback	32	static

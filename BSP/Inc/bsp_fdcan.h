@@ -11,6 +11,6 @@ uint8_t fdcanx_send_data(hcan_t *hfdcan, uint16_t id, uint8_t *data, uint32_t le
 uint8_t fdcanx_receive(hcan_t *hfdcan, uint16_t *rec_id, uint8_t *buf);
 void fdcan1_rx_callback(void);
 void fdcan2_rx_callback(void);
-void fdcan3_rx_callback(void);ok
+void fdcan3_rx_callback(void);
 
 #endif /* __BSP_FDCAN_H_ */

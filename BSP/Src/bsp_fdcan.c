@@ -1,4 +1,6 @@
 #include "bsp_fdcan.h"
+#include "j60_10.h"
+#include "j60_10motor_task.h"
 /**
 ************************************************************************
 * @brief:      	bsp_can_init(void)
@@ -7,6 +9,9 @@
 * @details:    	CAN 使能
 ************************************************************************
 **/
+
+extern motor_t j60_motor[6];
+
 void bsp_can_init(void)
 {
 	can_filter_init();
@@ -134,18 +139,60 @@ uint16_t rec_id1;
 void fdcan1_rx_callback(void)
 {
 	fdcanx_receive(&hfdcan1, &rec_id1, rx_data1);
+	
+	// Extract motor ID from CAN ID (lower 5 bits)
+	uint8_t motor_id = rec_id1 & 0x0F;
+	
+	// Find the motor with this ID using switch case
+	motor_t* motor = NULL;
+	switch(motor_id) {
+		case 1:
+			motor = &j60_motor[0];
+			break;
+		case 2:
+			motor = &j60_motor[1];
+			break;
+		case 3:
+			motor = &j60_motor[2];
+			break;
+		case 4:
+			motor = &j60_motor[3];
+			break;
+		case 5:
+			motor = &j60_motor[4];
+			break;
+		case 6:
+			motor = &j60_motor[5];
+			break;
+		default:
+			// Invalid motor ID, do nothing
+			return;
+	}
+	
+	// Update motor feedback data
+	motor->para.id = motor_id;
+	motor->para.online = 1;
+	J60_Process_Feedback(motor, rx_data1);
 }
 uint8_t rx_data2[8] = {0};
 uint16_t rec_id2;
 void fdcan2_rx_callback(void)
 {
 	fdcanx_receive(&hfdcan2, &rec_id2, rx_data2);
+	
+	// Extract motor ID from CAN ID (lower 5 bits)
+//	uint8_t motor_id = rec_id2 & 0x1F;
+	
 }
 uint8_t rx_data3[8] = {0};
 uint16_t rec_id3;
 void fdcan3_rx_callback(void)
 {
 	fdcanx_receive(&hfdcan3, &rec_id3, rx_data3);
+	
+	// Extract motor ID from CAN ID (lower 5 bits)
+//	uint8_t motor_id = rec_id3 & 0x1F;
+	
 }
 
 

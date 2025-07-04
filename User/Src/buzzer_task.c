@@ -31,7 +31,7 @@ void BUZZER_TASK(void) {
     Buzzer_Init();
     
     // Set a moderate volume
-    Buzzer_SetVolume(50); // 30% volume to avoid being too loud
+    Buzzer_SetVolume(1); // 30% volume to avoid being too loud
     
     // Startup sound - quick melody to indicate system start
     const uint32_t startup_freq[] = {NOTE_C4, NOTE_E4, NOTE_G4};

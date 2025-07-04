@@ -29,8 +29,8 @@
 #include "usart.h"
 #include "string.h"
 #include "imu_task.h"
-#include "bsp_fdcan.h"
 #include "buzzer_task.h"
+#include "j60_10motor_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -40,10 +40,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define MAP_F32_TO_U16(val, min, max) ((uint16_t)(((val) - (min)) * 65535.0f / ((max) - (min))))
-#define MAP_F32_TO_U14(val, min, max) ((uint16_t)(((val) - (min)) * 16383.0f / ((max) - (min))))
-#define MAP_F32_TO_U10(val, min, max) ((uint16_t)(((val) - (min)) * 1023.0f / ((max) - (min))))
-#define MAP_F32_TO_U8(val, min, max)  ((uint8_t)(((val) - (min)) * 255.0f / ((max) - (min))))
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -66,23 +63,20 @@ osStaticThreadDef_t imuTaskControlBlock;
 osThreadId buzzerTaskHandle;
 uint32_t buzzerTaskBuffer[ 128 ];
 osStaticThreadDef_t buzzerTaskControlBlock;
+osThreadId J60_10TaskHandle;
+uint32_t J60_10TaskBuffer[ 128 ];
+osStaticThreadDef_t J60_10TaskControlBlock;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-void Enable_J60_Motor(uint8_t joint_id)
-{
-    uint32_t can_id = (joint_id & 0x1F) | (2 << 5); // Enable command index = 2
-    uint8_t dummy_data[1] = {0}; // In case DLC=0 is not allowed
 
-    // Send with DLC = 0 or 1 depending on FDCAN config
-    fdcanx_send_data(&hfdcan1, can_id, dummy_data, 0); // or replace with 1 if required
-}
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
 void PC_MCU_ENTRY(void const * argument);
 void ImuTask_Entry(void const * argument);
 void buzzerEntry(void const * argument);
+void J60_10Entry(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -161,6 +155,10 @@ void MX_FREERTOS_Init(void) {
   osThreadStaticDef(buzzerTask, buzzerEntry, osPriorityBelowNormal, 0, 128, buzzerTaskBuffer, &buzzerTaskControlBlock);
   buzzerTaskHandle = osThreadCreate(osThread(buzzerTask), NULL);
 
+  /* definition and creation of J60_10Task */
+  osThreadStaticDef(J60_10Task, J60_10Entry, osPriorityNormal, 0, 128, J60_10TaskBuffer, &J60_10TaskControlBlock);
+  J60_10TaskHandle = osThreadCreate(osThread(J60_10Task), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -177,44 +175,39 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
-	bsp_can_init();
+
 //	Enable_J60_Motor(1); // enable motor with joint ID 2
 //	Enable_J60_Motor(2);
-	Enable_J60_Motor(3);
 
   /* Infinite loop */
   for(;;)
   {
-	  float target_pos = 0.0f;    // rad [-40, 40]
-	  float target_vel = 0.0f;    // rad/s [-40, 40]
-	  float target_kp  = 50.0f;   // [0, 1023]
-	  float target_kd  = 5.0f;    // [0, 51]
-	  float target_torque = 0.0f; // Nm [-40, 40]
 
-	  uint16_t pos_u16 = MAP_F32_TO_U16(target_pos, -40.0f, 40.0f);
-	  uint16_t vel_u14 = MAP_F32_TO_U14(target_vel, -40.0f, 40.0f);
-	  uint16_t kp_u10  = MAP_F32_TO_U10(target_kp, 0.0f, 1023.0f);
-	  uint8_t  kd_u8   = MAP_F32_TO_U8(target_kd, 0.0f, 51.0f);
-	  uint16_t torque_u16 = MAP_F32_TO_U16(target_torque, -40.0f, 40.0f);
 
-	  uint8_t cmd_data[8] = {0};
+//	  uint16_t pos_u16 = MAP_F32_TO_U16(target_pos, -40.0f, 40.0f);
+//	  uint16_t vel_u14 = MAP_F32_TO_U14(target_vel, -40.0f, 40.0f);
+//	  uint16_t kp_u10  = MAP_F32_TO_U10(target_kp, 0.0f, 1023.0f);
+//	  uint8_t  kd_u8   = MAP_F32_TO_U8(target_kd, 0.0f, 51.0f);
+//	  uint16_t torque_u16 = MAP_F32_TO_U16(target_torque, -40.0f, 40.0f);
+//
+//	  uint8_t cmd_data[8] = {0};
 
 	  // Pack bits into cmd_data[]
-	  cmd_data[0] = (pos_u16 >> 8) & 0xFF;
-	  cmd_data[1] = pos_u16 & 0xFF;
-
-	  cmd_data[2] = (vel_u14 >> 6) & 0xFF;
-	  cmd_data[3] = ((vel_u14 & 0x3F) << 2) | ((kp_u10 >> 8) & 0x03);
-	  cmd_data[4] = kp_u10 & 0xFF;
-
-	  cmd_data[5] = kd_u8;
-
-	  cmd_data[6] = (torque_u16 >> 8) & 0xFF;
-	  cmd_data[7] = torque_u16 & 0xFF;
-
-	  // Send CAN control command
-	  uint32_t motor_ctrl_id = (0x01 & 0x1F) | (4 << 5); // joint_id = 1, CMD = 4
-	  fdcanx_send_data(&hfdcan1, motor_ctrl_id, cmd_data, 8);
+//	  cmd_data[0] = (pos_u16 >> 8) & 0xFF;
+//	  cmd_data[1] = pos_u16 & 0xFF;
+//
+//	  cmd_data[2] = (vel_u14 >> 6) & 0xFF;
+//	  cmd_data[3] = ((vel_u14 & 0x3F) << 2) | ((kp_u10 >> 8) & 0x03);
+//	  cmd_data[4] = kp_u10 & 0xFF;
+//
+//	  cmd_data[5] = kd_u8;
+//
+//	  cmd_data[6] = (torque_u16 >> 8) & 0xFF;
+//	  cmd_data[7] = torque_u16 & 0xFF;
+//
+//	  // Send CAN control command
+//	  uint32_t motor_ctrl_id = (0x01 & 0x1F) | (4 << 5); // joint_id = 1, CMD = 4
+//	  fdcanx_send_data(&hfdcan1, motor_ctrl_id, cmd_data, 8);
 //	  tx_data[0] = (current_cmd >> 8) & 0xFF;
 //	  tx_data[1] = current_cmd & 0xFF;
 	  //	  tx_data[2] = current_cmd >> 8;
@@ -294,6 +287,25 @@ void buzzerEntry(void const * argument)
     osDelay(1);
   }
   /* USER CODE END buzzerEntry */
+}
+
+/* USER CODE BEGIN Header_J60_10Entry */
+/**
+* @brief Function implementing the J60_10Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_J60_10Entry */
+void J60_10Entry(void const * argument)
+{
+  /* USER CODE BEGIN J60_10Entry */
+  /* Infinite loop */
+  for(;;)
+  {
+	j60_10_TASK();
+    osDelay(1);
+  }
+  /* USER CODE END J60_10Entry */
 }
 
 /* Private application code --------------------------------------------------*/
