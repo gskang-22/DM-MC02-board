@@ -1,0 +1,11 @@
+../BSP/Src/buzzer.c:18:6:Buzzer_Init	8	static
+../BSP/Src/buzzer.c:33:6:Buzzer_PlayTone	16	static
+../BSP/Src/buzzer.c:51:6:Buzzer_PlayToneAsync	16	static
+../BSP/Src/buzzer.c:65:6:Buzzer_Stop	4	static
+../BSP/Src/buzzer.c:75:6:Buzzer_SetVolume	16	static
+../BSP/Src/buzzer.c:92:15:Buzzer_GetState	4	static
+../BSP/Src/buzzer.c:99:6:Buzzer_Beep	8	static
+../BSP/Src/buzzer.c:106:6:Buzzer_Alert	8	static
+../BSP/Src/buzzer.c:116:6:Buzzer_PlayMelody	32	static
+../BSP/Src/buzzer.c:127:13:Buzzer_SetFrequency	24	static
+../BSP/Src/buzzer.c:145:13:Buzzer_SetDutyCycle	24	static

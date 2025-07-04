@@ -1,0 +1,3 @@
+../User/Src/pc_mcu_uart.c:20:6:MCU_TO_PC_DATA_ASSIGN	1
+../User/Src/pc_mcu_uart.c:33:10:crc16_ccitt	4
+../User/Src/pc_mcu_uart.c:48:6:PC_MCU_UART_TASK	1

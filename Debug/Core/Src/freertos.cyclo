@@ -1,0 +1,8 @@
+../Core/Src/freertos.c:72:6:Enable_J60_Motor	1
+../Core/Src/freertos.c:99:6:vApplicationGetIdleTaskMemory	1
+../Core/Src/freertos.c:112:6:vApplicationGetTimerTaskMemory	1
+../Core/Src/freertos.c:126:6:MX_FREERTOS_Init	1
+../Core/Src/freertos.c:177:6:StartDefaultTask	1
+../Core/Src/freertos.c:250:6:PC_MCU_ENTRY	1
+../Core/Src/freertos.c:269:13:ImuTask_Entry	1
+../Core/Src/freertos.c:287:6:buzzerEntry	1

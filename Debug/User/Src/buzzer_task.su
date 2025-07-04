@@ -1,0 +1,2 @@
+../User/Src/buzzer_task.c:19:6:BuzzerTask_HeartbeatBeep	8	static
+../User/Src/buzzer_task.c:29:6:BUZZER_TASK	32	static

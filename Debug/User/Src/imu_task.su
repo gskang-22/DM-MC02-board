@@ -1,0 +1,7 @@
+../User/Src/imu_task.c:33:6:AHRS_init	16	static
+../User/Src/imu_task.c:41:6:AHRS_update	24	static
+../User/Src/imu_task.c:46:6:GetAngle	24	static
+../User/Src/imu_task.c:59:6:TransformAccelToWorldFrame	80	static
+../User/Src/imu_task.c:90:6:CalculateVelocity	24	static
+../User/Src/imu_task.c:115:6:CalculateProjectedGravity	32	static
+../User/Src/imu_task.c:135:6:ImuTask_Entry	16	static
