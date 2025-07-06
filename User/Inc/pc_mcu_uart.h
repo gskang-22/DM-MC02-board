@@ -14,30 +14,29 @@
 extern "C" {
 #endif
 
-// Armor plate data structure
-typedef struct {
-    float tvec_y;
-    float tvec_z;
-    float is_detected;
-    float armor_length;
-    float armor_width;
-    float orientation;
-    float delta_x;
-    float delta_y;
-} armorPlate_t;
+// PC sends 7 floats to MCU
+#define PC_TO_MCU_FLOATS 7
+#define PC_TO_MCU_MSG_SIZE (PC_TO_MCU_FLOATS * 4 + 2) // 7 floats + 2 bytes CRC = 30 bytes
 
-#define NUM_FLOATS 8  // Updated to match armor plate structure
-#define MCU_MSG_SIZE (NUM_FLOATS * 4) // 8 floats + 2 bytes CRC
+// MCU sends 25 floats to PC
+#define MCU_TO_PC_FLOATS 25
+#define MCU_TO_PC_MSG_SIZE (MCU_TO_PC_FLOATS * 4 + 2) // 25 floats + 2 bytes CRC = 102 bytes
 
-extern float pc_mcu_tx_data[NUM_FLOATS]; // User: assign floats to send
-extern float pc_mcu_rx_data[NUM_FLOATS]; // User: read floats received
-extern armorPlate_t armor_data;  // Structure to store received armor data
+// *** From MCU's perspective ***
+// pc_mcu_tx_data = Data that MCU TRANSMITS to PC (MCU → PC)
+extern float pc_mcu_tx_data[MCU_TO_PC_FLOATS]; // MCU sends 25 floats to PC
 
-// Add these declarations
-extern uint8_t rx_buffer[MCU_MSG_SIZE];
+// pc_mcu_rx_data = Data that MCU RECEIVES from PC (PC → MCU)
+extern float pc_mcu_rx_data[PC_TO_MCU_FLOATS]; // MCU receives 7 floats from PC
+
+// UART buffers (from MCU's perspective)
+extern uint8_t tx_buffer[MCU_TO_PC_MSG_SIZE];  // MCU transmit buffer (102 bytes)
+extern uint8_t rx_buffer[PC_TO_MCU_MSG_SIZE];  // MCU receive buffer (30 bytes)
+
 uint16_t crc16_ccitt(const uint8_t *data, uint16_t len);
 
 void PC_MCU_UART_TASK(void);
+void PC_MCU_UART_Process_Received_Data(void);
 
 #ifdef __cplusplus
 }

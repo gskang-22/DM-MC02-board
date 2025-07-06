@@ -54,4 +54,3 @@ extern remoter_t remoter;
 //void sbus_frame_parse(remoter_t *remoter, uint8_t *buf);
 
 #endif /*__UART_BSP_H__ */
-

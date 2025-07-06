@@ -94,7 +94,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef * huart)
 		__HAL_UART_CLEAR_FLAG(huart, UART_FLAG_ORE | UART_FLAG_FE | UART_FLAG_NE | UART_FLAG_PE);
 		
 		// Re-arm the UART receive
-		HAL_UART_Receive_IT(&huart10, rx_buffer, MCU_MSG_SIZE);
+		HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
 	}
 }
 
@@ -109,17 +109,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 //        memset(uart5_rx_buff, 0, BUFF_SIZE);
 
         // Restart reception for UART5
-//        HAL_UART_Receive_IT(&huart5, uart5_rx_buff, BUFF_SIZE);
+        HAL_UART_Receive_IT(&huart5, uart5_rx_buff, BUFF_SIZE);
     }
     else if(huart->Instance == USART10)
     {
-        // Copy data to structure first
-        memcpy(&armor_data, rx_buffer, NUM_FLOATS * 4);
-        
-        // Then copy to float array
-        memcpy(pc_mcu_rx_data, rx_buffer, NUM_FLOATS * 4);
-        
-        // Re-arm receive AFTER processing the data
-        HAL_UART_Receive_IT(&huart10, rx_buffer, MCU_MSG_SIZE);
+        // PC sent 25 floats to MCU - process the received data
+        PC_MCU_UART_Process_Received_Data();
     }
 }

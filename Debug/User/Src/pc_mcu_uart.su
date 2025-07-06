@@ -1,3 +1,4 @@
-../User/Src/pc_mcu_uart.c:20:6:MCU_TO_PC_DATA_ASSIGN	4	static
-../User/Src/pc_mcu_uart.c:33:10:crc16_ccitt	24	static
-../User/Src/pc_mcu_uart.c:48:6:PC_MCU_UART_TASK	24	static
+../User/Src/pc_mcu_uart.c:24:6:MCU_TO_PC_DATA_ASSIGN	4	static
+../User/Src/pc_mcu_uart.c:53:10:crc16_ccitt	24	static
+../User/Src/pc_mcu_uart.c:68:6:PC_MCU_UART_Process_Received_Data	24	static
+../User/Src/pc_mcu_uart.c:83:6:PC_MCU_UART_TASK	16	static
