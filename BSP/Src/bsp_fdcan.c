@@ -126,7 +126,9 @@ uint8_t fdcanx_receive(hcan_t *hfdcan, uint16_t *rec_id, uint8_t *buf)
 			len = 48;
 		if(pRxHeader.DataLength<=FDCAN_DLC_BYTES_64)
 			len = 64;
-		
+		if(pRxHeader.DataLength == 1){ //self added
+			len = 8;
+		}
 		return len;//接收数据
 	}
 	return 0;	
@@ -138,7 +140,7 @@ uint8_t rx_data1[8] = {0};
 uint16_t rec_id1;
 void fdcan1_rx_callback(void)
 {
-	fdcanx_receive(&hfdcan1, &rec_id1, rx_data1);
+	uint8_t len = fdcanx_receive(&hfdcan1, &rec_id1, rx_data1);
 	
 	// Extract motor ID from CAN ID (lower 5 bits)
 	uint8_t motor_id = rec_id1 & 0x0F;
@@ -171,8 +173,12 @@ void fdcan1_rx_callback(void)
 	
 	// Update motor feedback data
 	motor->para.id = motor_id;
-	motor->para.online = 1;
-	J60_Process_Feedback(motor, rx_data1);
+	if (len == 8){
+		J60_Enable_Feedback(motor, rx_data1);
+	}else{
+		J60_Process_Feedback(motor, rx_data1);
+	}
+
 }
 uint8_t rx_data2[8] = {0};
 uint16_t rec_id2;

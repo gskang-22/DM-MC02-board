@@ -18,7 +18,7 @@ extern "C" {
 #define NOTE_C5     523
 
 // Additional useful frequencies
-#define NOTE_BEEP   1000    // Generic beep tone
+#define NOTE_BEEP   262    // Generic beep tone
 #define NOTE_ALERT  2000    // Alert tone
 #define NOTE_LOW    500     // Low tone
 #define NOTE_HIGH   3000    // High tone
@@ -41,6 +41,7 @@ BuzzerState_t Buzzer_GetState(void);
 void Buzzer_Beep(void);
 void Buzzer_Alert(void);
 void Buzzer_PlayMelody(const uint32_t* frequencies, const uint32_t* durations, uint8_t length);
+void Buzzer_PlayStartupMelody(void);
 
 #ifdef __cplusplus
 }

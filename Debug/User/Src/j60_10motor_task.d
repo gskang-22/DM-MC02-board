@@ -17,7 +17,8 @@ User/Src/j60_10motor_task.o: ../User/Src/j60_10motor_task.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/j60_10.h
+ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/j60_10.h \
+ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/buzzer.h
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/j60_10motor_task.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
@@ -37,3 +38,4 @@ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/j60_10motor_
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/j60_10.h:
+C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/buzzer.h:

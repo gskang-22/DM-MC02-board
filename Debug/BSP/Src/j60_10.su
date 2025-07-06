@@ -1,4 +1,8 @@
-../BSP/Src/j60_10.c:12:6:Enable_J60_Motor	24	static
-../BSP/Src/j60_10.c:35:6:Init_J60_Motor	16	static
-../BSP/Src/j60_10.c:77:6:Send_J60_Motor_Command	40	static
-../BSP/Src/j60_10.c:135:6:J60_Process_Feedback	32	static
+../BSP/Src/j60_10.c:13:6:Enable_J60_Motor	24	static
+../BSP/Src/j60_10.c:36:6:Init_J60_Motor	24	static
+../BSP/Src/j60_10.c:79:6:Send_J60_Motor_Command	48	static
+../BSP/Src/j60_10.c:141:6:J60_Process_Feedback	32	static
+../BSP/Src/j60_10.c:196:6:J60_Enable_Feedback	16	static
+../BSP/Src/j60_10.c:201:6:J60_Cmd_Clear	16	static
+../BSP/Src/j60_10.c:215:9:J60_Safety_Check	16	static
+../BSP/Src/j60_10.c:236:6:J60_Safety_Reset	16	static

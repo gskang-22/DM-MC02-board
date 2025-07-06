@@ -1,2 +1,3 @@
-../User/Src/buzzer_task.c:19:6:BuzzerTask_HeartbeatBeep	8	static
-../User/Src/buzzer_task.c:29:6:BUZZER_TASK	32	static
+../User/Src/buzzer_task.c:22:6:BuzzerTask_HeartbeatBeep	8	static
+../User/Src/buzzer_task.c:28:6:J60_Motor_Offline_Beep	8	static
+../User/Src/buzzer_task.c:40:6:BUZZER_TASK	32	static

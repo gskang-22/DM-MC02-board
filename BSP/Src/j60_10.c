@@ -6,6 +6,7 @@
  */
 #include "bsp_fdcan.h"
 #include "j60_10.h"
+#include <math.h>
 
 
 
@@ -32,7 +33,7 @@ void Enable_J60_Motor(motor_t *motor)
 }
 
 // Initialize a single J60 motor with specified ID and CAN channel
-void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel)
+void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel, float rad_offset)
 {
     // Set motor identification
     motor->id = motor_id;
@@ -68,16 +69,18 @@ void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel)
     motor->para.rotations = 0;
     motor->para.heartbeat = 0;
     motor->para.ping = 0;
-    motor->para.disconnect_time = 0;
-    motor->para.online = 0;
-    motor->para.pos_predict = 0.0f;
+    motor->para.online = 1;
+    motor->para.safety_stop = 0; // Initialize safety stop flag
+
+    motor->rad_offset = rad_offset;
 }
 
 // Send control command to a single J60 motor
 void Send_J60_Motor_Command(motor_t *motor)
 {
-    // Convert float commands to appropriate bit sizes according to J60 protocol
-    uint16_t pos_u16 = MAP_F32_TO_U16(motor->cmd.pos_set, -40.0f, 40.0f);
+
+	float pos_set_after_offset = motor->cmd.pos_set - motor->rad_offset;
+    uint16_t pos_u16 = MAP_F32_TO_U16(pos_set_after_offset, -40.0f, 40.0f);
     uint16_t vel_u14 = MAP_F32_TO_U14(motor->cmd.vel_set, -40.0f, 40.0f);
     uint16_t kp_u10  = MAP_F32_TO_U10(motor->cmd.kp_set, 0.0f, 1023.0f);
     uint8_t  kd_u8   = MAP_F32_TO_U8(motor->cmd.kd_set, 0.0f, 51.0f);
@@ -110,6 +113,9 @@ void Send_J60_Motor_Command(motor_t *motor)
     // Bit48~Bit63: Target torque (16 bits in bytes 6-7)
     cmd_data[6] = torque_u16 & 0xFF;        // Lower 8 bits
     cmd_data[7] = (torque_u16 >> 8) & 0xFF; // Upper 8 bits
+
+    //ping+1 mean send msg and receive function should set it back to 0
+    motor->para.ping += 1;
 
     // Create CAN ID: motor_id + command index 4 (control command)
     uint32_t motor_ctrl_id = (motor->id & 0x1F) | (4 << 5);
@@ -167,7 +173,8 @@ void J60_Process_Feedback(motor_t *motor, uint8_t *rx_data)
     motor->para.t_int = tor_raw;
     
     // Convert to float values using J60 ranges
-    motor->para.pos = MAP_U20_TO_F32(pos_raw, J60_POS_MIN, J60_POS_MAX);  // [-40, +40] rad
+    float pos_before_offset = MAP_U20_TO_F32(pos_raw, J60_POS_MIN, J60_POS_MAX);
+    motor->para.pos = pos_before_offset + motor->rad_offset;  // [-40, +40] rad
     motor->para.vel = MAP_U20_TO_F32(vel_raw, J60_VEL_MIN, J60_VEL_MAX);  // [-40, +40] rad/s
     motor->para.tor = MAP_U16_TO_F32(tor_raw, J60_TOR_MIN, J60_TOR_MAX);  // [-40, +40] N·m
     
@@ -183,8 +190,50 @@ void J60_Process_Feedback(motor_t *motor, uint8_t *rx_data)
         motor->para.Tcoil = motor->para.temperature;  // Motor temperature
     }
     
-    // Set motor state and ID (these might come from CAN ID instead of data)
-    motor->para.state = 1;  // Assume motor is active if sending feedback
-    motor->para.online = 1; // Mark motor as online
+    motor->para.ping = 0;
 }
 
+void J60_Enable_Feedback(motor_t *motor, uint8_t *rx_data)
+{
+    motor->para.enable_failed = rx_data[0];
+}
+
+void J60_Cmd_Clear(motor_t *motor){
+	motor->cmd.pos_set = 0.0f;
+	motor->cmd.vel_set = 0.0f;
+	motor->cmd.kp_set = 0.0f;
+	motor->cmd.kd_set = 0.0f;
+	motor->cmd.tor_set = 0.0f;
+}
+
+/**
+ * @brief Safety check function for motor torque
+ * @param motor Pointer to motor structure
+ * @param torque_limit Maximum allowed torque (absolute value)
+ * @return 1 if motor is in safety stop, 0 if motor is safe to operate
+ */
+uint8_t J60_Safety_Check(motor_t *motor, float torque_limit)
+{
+    // Check if absolute torque exceeds limit
+    if (fabsf(motor->para.tor) > torque_limit) {
+        // Set safety stop flag
+        motor->para.safety_stop = 1;
+        
+        // Clear all motor commands for safety
+        J60_Cmd_Clear(motor);
+        
+        return 1; // Motor is in safety stop
+    }
+    
+    // Motor is safe to operate
+    return 0;
+}
+
+/**
+ * @brief Reset safety stop flag
+ * @param motor Pointer to motor structure
+ */
+void J60_Safety_Reset(motor_t *motor)
+{
+    motor->para.safety_stop = 0;
+}

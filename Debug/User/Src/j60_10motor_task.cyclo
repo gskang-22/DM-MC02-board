@@ -1,1 +1,2 @@
-../User/Src/j60_10motor_task.c:16:6:j60_10_TASK	1
+../User/Src/j60_10motor_task.c:17:6:j60_10_TASK	4
+../User/Src/j60_10motor_task.c:57:6:J60_10_MOTOR_ONLINE_CHECK	2

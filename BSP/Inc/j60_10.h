@@ -55,10 +55,9 @@ typedef struct
 	int rotations;
 	int heartbeat;
 	int ping;
-	int8_t disconnect_time;
 	int online;
-	float pos_predict;
-
+	uint8_t enable_failed;
+	uint8_t safety_stop; // Safety stop flag when torque exceeds limit
 }motor_fbpara_t;
 
 typedef struct
@@ -76,12 +75,17 @@ typedef struct
 	uint8_t can_number;
 	motor_fbpara_t para;
 	motor_ctrl_t cmd;
+	float rad_offset;
 }motor_t;
 
 void Enable_J60_Motor(motor_t *motor);
-void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel);
+void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel, float rad_offset);
 void Send_J60_Motor_Command(motor_t *motor);
 void J60_Process_Feedback(motor_t *motor, uint8_t *rx_data);
 void J60_UintsToFloats(uint8_t *data_recv, float *float_data);
+void J60_Enable_Feedback(motor_t *motor, uint8_t *rx_data);
+void J60_Cmd_Clear(motor_t *motor);
+uint8_t J60_Safety_Check(motor_t *motor, float torque_limit);
+void J60_Safety_Reset(motor_t *motor);
 
 #endif /* INC_J60_10_H_ */

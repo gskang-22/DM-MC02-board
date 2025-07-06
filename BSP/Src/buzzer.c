@@ -150,3 +150,21 @@ static void Buzzer_SetDutyCycle(uint8_t duty_percent) {
     
     TIM12->CCR2 = ccr;
 }
+
+/**
+ * @brief Play startup melody for 2 seconds
+ * This function initializes the buzzer and plays a startup melody
+ */
+void Buzzer_PlayStartupMelody(void) {
+    // Initialize buzzer system
+    Buzzer_Init();
+    Buzzer_SetVolume(30); // Set moderate volume (30%)
+    
+    // Define startup melody - plays for approximately 2 seconds
+    const uint32_t melody_frequencies[] = {NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C5, NOTE_G4, NOTE_E4, NOTE_C4};
+    const uint32_t melody_durations[] = {250, 250, 250, 300, 250, 250, 400};
+    
+    // Play melody
+    Buzzer_PlayMelody(melody_frequencies, melody_durations, 7);
+    osDelay(500); // Small additional delay for safety
+}

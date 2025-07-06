@@ -9,3 +9,4 @@
 ../BSP/Src/buzzer.c:116:6:Buzzer_PlayMelody	32	static
 ../BSP/Src/buzzer.c:127:13:Buzzer_SetFrequency	24	static
 ../BSP/Src/buzzer.c:145:13:Buzzer_SetDutyCycle	24	static
+../BSP/Src/buzzer.c:158:6:Buzzer_PlayStartupMelody	72	static
