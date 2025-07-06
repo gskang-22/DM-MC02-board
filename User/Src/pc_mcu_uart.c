@@ -20,6 +20,13 @@ float pc_mcu_rx_data[PC_TO_MCU_FLOATS] = {0};  // MCU receives 7 floats from PC
 uint8_t tx_buffer[MCU_TO_PC_MSG_SIZE];     // MCU transmit buffer: 102 bytes (25 floats + CRC)
 uint8_t rx_buffer[PC_TO_MCU_MSG_SIZE];     // MCU receive buffer: 30 bytes (7 floats + CRC)
 
+// CRC Error Handler Variables
+static uart_error_handler_t error_handler = {0};
+
+// Error handling configuration
+#define MAX_CONSECUTIVE_ERRORS  5      // Max consecutive errors before recovery
+#define RECEIVE_TIMEOUT_MS      2000   // 2 second timeout
+#define RECOVERY_DELAY_MS       100    // Delay during recovery
 
 void MCU_TO_PC_DATA_ASSIGN(){
 	// Add some specific test values to MCU transmission
@@ -48,6 +55,11 @@ void MCU_TO_PC_DATA_ASSIGN(){
     pc_mcu_tx_data[22] = 13.2f;
     pc_mcu_tx_data[23] += 0.001f;
     pc_mcu_tx_data[24] = 14.2f;
+    
+    // Add error statistics to transmission for debugging
+    pc_mcu_tx_data[22] = 1.2f;        // Send error count to PC
+    pc_mcu_tx_data[23] = 0;   // Send recovery count to PC
+    pc_mcu_tx_data[24] = 729.12f;    // Send total received count to PC
 }
 
 uint16_t crc16_ccitt(const uint8_t *data, uint16_t len) {
@@ -65,26 +77,95 @@ uint16_t crc16_ccitt(const uint8_t *data, uint16_t len) {
     return crc;
 }
 
+void UART_Error_Recovery(void) {
+    // Perform UART error recovery
+    error_handler.recovery_count++;
+    error_handler.consecutive_errors = 0;
+    error_handler.error_state = 1;
+    
+    // 1. Abort any ongoing UART operations
+    HAL_UART_Abort(&huart10);
+    
+    // 2. Clear UART error flags
+    __HAL_UART_CLEAR_FLAG(&huart10, UART_FLAG_ORE | UART_FLAG_FE | UART_FLAG_NE | UART_FLAG_PE);
+    
+    // 3. Clear receive buffer
+    memset(rx_buffer, 0, PC_TO_MCU_MSG_SIZE);
+    
+    // 4. Small delay to let line stabilize
+    osDelay(RECOVERY_DELAY_MS);
+    
+    // 5. Restart UART receive
+    HAL_StatusTypeDef status = HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
+    
+    if (status == HAL_OK) {
+        error_handler.error_state = 0;  // Recovery successful
+    }
+}
+
+void Check_Receive_Timeout(void) {
+    uint32_t current_time = HAL_GetTick();
+    
+    // Check if too much time has passed since last successful receive
+    if (error_handler.last_receive_time > 0 && 
+        (current_time - error_handler.last_receive_time) > RECEIVE_TIMEOUT_MS) {
+        
+        // Timeout occurred - perform recovery
+        UART_Error_Recovery();
+        error_handler.last_receive_time = current_time;  // Reset timeout
+    }
+}
+
 void PC_MCU_UART_Process_Received_Data(void) {
     // Process data that MCU RECEIVED from PC (7 floats)
     uint16_t received_crc = (uint16_t)rx_buffer[PC_TO_MCU_FLOATS * 4] | 
                            ((uint16_t)rx_buffer[PC_TO_MCU_FLOATS * 4 + 1] << 8);
     uint16_t calculated_crc = crc16_ccitt(rx_buffer, PC_TO_MCU_FLOATS * 4);
     
-    if (received_crc == calculated_crc) {
-        // CRC OK - Copy received floats to pc_mcu_rx_data[] (MCU received data)
-        memcpy(pc_mcu_rx_data, rx_buffer, PC_TO_MCU_FLOATS * 4);
-    }
+    error_handler.total_received++;
     
-    // Re-arm UART receive for next message from PC
-    HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
+    if (received_crc == calculated_crc) {
+        // *** CRC SUCCESS ***
+        // Copy received floats to pc_mcu_rx_data[] (MCU received data)
+        memcpy(pc_mcu_rx_data, rx_buffer, PC_TO_MCU_FLOATS * 4);
+        
+        // Reset error tracking on successful receive
+        error_handler.consecutive_errors = 0;
+        error_handler.last_receive_time = HAL_GetTick();
+        error_handler.error_state = 0;
+        
+        // Re-arm UART receive for next message from PC
+        HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
+    } 
+    else {
+        // *** CRC ERROR - Comprehensive Error Handling ***
+        error_handler.crc_errors++;
+        error_handler.consecutive_errors++;
+        
+        // Check if too many consecutive errors
+        if (error_handler.consecutive_errors >= MAX_CONSECUTIVE_ERRORS) {
+            // Perform comprehensive recovery
+            UART_Error_Recovery();
+        } 
+        else {
+            // Simple recovery - clear buffer and restart receive
+            memset(rx_buffer, 0, PC_TO_MCU_MSG_SIZE);
+            HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
+        }
+    }
 }
 
 void PC_MCU_UART_TASK(void) {
+    // Initialize error handler
+    error_handler.last_receive_time = HAL_GetTick();
+    
     // Start first receive (expecting 7 floats from PC)
     HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
 
     for (;;) {
+        // Check for receive timeout
+        Check_Receive_Timeout();
+        
         // Prepare data that MCU will TRANSMIT to PC (25 floats)
         MCU_TO_PC_DATA_ASSIGN();
         memcpy(tx_buffer, pc_mcu_tx_data, MCU_TO_PC_FLOATS * 4);
@@ -96,8 +177,12 @@ void PC_MCU_UART_TASK(void) {
         HAL_UART_Transmit_IT(&huart10, tx_buffer, MCU_TO_PC_MSG_SIZE);
 
         // Re-arm UART receive periodically to ensure it's always active
-        HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
+        // Only if not in error state
+        if (!error_handler.error_state) {
+            HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
+        }
 
         osDelay(5); // Send every 5ms
     }
 }
+

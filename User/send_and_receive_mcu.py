@@ -46,6 +46,11 @@ class MCUComm:
         self.last_send_time = time.time()
         self.min_interval = 0.005  # 5ms target interval to match MCU
         self.interval_stats = []
+        
+        # MCU error statistics (received from MCU)
+        self.mcu_crc_errors = 0
+        self.mcu_recovery_count = 0
+        self.mcu_total_received = 0
 
     def send(self):
         
@@ -87,11 +92,18 @@ class MCUComm:
                         self.rx_data = list(struct.unpack(MCU_TO_PC_FORMAT, data))
                         self.rx_count += 1
                         
+                        # Extract MCU error statistics (floats 22, 23, 24)
+                        if len(self.rx_data) >= 25:
+                            self.mcu_crc_errors = int(self.rx_data[22])
+                            self.mcu_recovery_count = int(self.rx_data[23])
+                            self.mcu_total_received = int(self.rx_data[24])
+                        
                         # Print received data every 50 successful receives
-                        if self.rx_count % 50 == 0:
+                        if self.rx_count % 100 == 0:
                             print(f"[RX] Received {MCU_TO_PC_FLOATS} floats: {[f'{x:.2f}' for x in self.rx_data[:5]]}... {self.rx_data[-1]:.2f}")
-                            success_rate = (self.rx_count / (self.rx_count + self.rx_errors)) * 100
-                            print(f"     TX: {self.send_count} | RX: {self.rx_count} | Errors: {self.rx_errors} | Success: {success_rate:.1f}%")
+                            # success_rate = (self.rx_count / (self.rx_count + self.rx_errors)) * 100
+                            # print(f"     PC Stats - TX: {self.send_count} | RX: {self.rx_count} | Errors: {self.rx_errors} | Success: {success_rate:.1f}%")
+                            # print(f"     MCU Stats - Total RX: {self.mcu_total_received} | CRC Errors: {self.mcu_crc_errors} | Recoveries: {self.mcu_recovery_count}")
                     else:
                         self.rx_errors += 1
                         if self.rx_errors % 10 == 0:
@@ -105,18 +117,29 @@ class MCUComm:
     def print_stats(self):
         if self.interval_stats:
             stats = np.array(self.interval_stats)
-            print("\nTiming Statistics:")
-            print(f"Total messages sent: {self.send_count}")
-            print(f"Total messages received: {self.rx_count}")
-            print(f"Total CRC errors: {self.rx_errors}")
-            print(f"Average interval: {np.mean(stats)*1000:.3f} ms")
-            print(f"Min interval: {np.min(stats)*1000:.3f} ms")
-            print(f"Max interval: {np.max(stats)*1000:.3f} ms")
-            print(f"Std deviation: {np.std(stats)*1000:.3f} ms")
-            print(f"Target interval: {self.min_interval*1000:.3f} ms")
+            print("\nFinal Communication Statistics:")
+            print("=" * 50)
+            print("PC Side:")
+            print(f"  Messages sent to MCU: {self.send_count}")
+            print(f"  Messages received from MCU: {self.rx_count}")
+            print(f"  PC CRC errors: {self.rx_errors}")
+            print(f"  Average interval: {np.mean(stats)*1000:.3f} ms")
+            print(f"  Min interval: {np.min(stats)*1000:.3f} ms")
+            print(f"  Max interval: {np.max(stats)*1000:.3f} ms")
+            print(f"  Target interval: {self.min_interval*1000:.3f} ms")
+            
             if (self.rx_count + self.rx_errors) > 0:
                 success_rate = (self.rx_count / (self.rx_count + self.rx_errors)) * 100
-                print(f"Success rate: {success_rate:.1f}%")
+                print(f"  PC Success rate: {success_rate:.1f}%")
+            
+            print("\nMCU Side (from MCU transmission):")
+            print(f"  Total messages received by MCU: {self.mcu_total_received}")
+            print(f"  MCU CRC errors: {self.mcu_crc_errors}")
+            print(f"  MCU error recoveries: {self.mcu_recovery_count}")
+            
+            if self.mcu_total_received > 0:
+                mcu_success_rate = ((self.mcu_total_received - self.mcu_crc_errors) / self.mcu_total_received) * 100
+                print(f"  MCU Success rate: {mcu_success_rate:.1f}%")
 
     def close(self):
         self.running = False
@@ -128,11 +151,16 @@ def main():
     rx_thread = threading.Thread(target=comm.receive, daemon=True)
     rx_thread.start()
     
-    print("Asymmetric UART Communication Test")
-    print("=" * 50)
+    print("Asymmetric UART Communication Test with CRC Error Recovery")
+    print("=" * 60)
     print(f"PC → MCU: {PC_TO_MCU_FLOATS} floats ({PC_TO_MCU_MSG_SIZE} bytes)")
     print(f"MCU → PC: {MCU_TO_PC_FLOATS} floats ({MCU_TO_PC_MSG_SIZE} bytes)")
-    print("=" * 50)
+    print("=" * 60)
+    print("Features:")
+    print("  • Automatic CRC error recovery")
+    print("  • Timeout-based error detection")
+    print("  • Real-time error statistics from both PC and MCU")
+    print("=" * 60)
     print("Press Ctrl+C to stop.")
     print()
     

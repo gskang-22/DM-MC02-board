@@ -33,10 +33,24 @@ extern float pc_mcu_rx_data[PC_TO_MCU_FLOATS]; // MCU receives 7 floats from PC
 extern uint8_t tx_buffer[MCU_TO_PC_MSG_SIZE];  // MCU transmit buffer (102 bytes)
 extern uint8_t rx_buffer[PC_TO_MCU_MSG_SIZE];  // MCU receive buffer (30 bytes)
 
+// Error handler structure
+typedef struct {
+    uint32_t total_received;        // Total messages received
+    uint32_t crc_errors;           // Total CRC errors
+    uint32_t consecutive_errors;   // Consecutive CRC errors
+    uint32_t recovery_count;       // Number of times recovery was performed
+    uint32_t last_receive_time;    // Last successful receive time
+    uint8_t error_state;           // Error state flag
+} uart_error_handler_t;
+
+// Function declarations
 uint16_t crc16_ccitt(const uint8_t *data, uint16_t len);
 
 void PC_MCU_UART_TASK(void);
 void PC_MCU_UART_Process_Received_Data(void);
+void UART_Error_Recovery(void);
+void Check_Receive_Timeout(void);
+uart_error_handler_t* Get_UART_Error_Stats(void);
 
 #ifdef __cplusplus
 }
