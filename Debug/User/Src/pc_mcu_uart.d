@@ -52,7 +52,8 @@ User/Src/pc_mcu_uart.o: ../User/Src/pc_mcu_uart.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
+ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/imu_task.h
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/pc_mcu_uart.h:
 ../Core/Inc/usart.h:
 ../Core/Inc/main.h:
@@ -108,3 +109,4 @@ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/pc_mcu_uart.
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
+C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/imu_task.h:

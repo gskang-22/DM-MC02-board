@@ -14,5 +14,6 @@
 // Function prototypes
 void BUZZER_TASK(void);
 void BuzzerTask_HeartbeatBeep(void);
+void BuzzerTask_UART_Disconnected_Beep(void);
 
 #endif /* INC_BUZZER_TASK_H_ */

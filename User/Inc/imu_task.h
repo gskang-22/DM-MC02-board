@@ -27,6 +27,7 @@
 extern float imuAngle[3];
 extern float imuVelocity[3];
 extern float imuGravityProjected[3];
+extern float gyro[3];
 
 // Function declarations
 void TransformAccelToWorldFrame(float quat[4], float accel_body[3], float accel_world[3]);

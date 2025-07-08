@@ -50,7 +50,14 @@ void PC_MCU_UART_TASK(void);
 void PC_MCU_UART_Process_Received_Data(void);
 void UART_Error_Recovery(void);
 void Check_Receive_Timeout(void);
-uart_error_handler_t* Get_UART_Error_Stats(void);
+
+// UART Communication Status Functions (for buzzer alerts)
+uint8_t PC_MCU_UART_Is_Connected(void);
+uint32_t PC_MCU_UART_Get_Time_Since_Last_Receive(void);
+uart_error_handler_t* PC_MCU_UART_Get_Error_Stats(void);
+
+// UART connection timeout threshold (in milliseconds)
+#define UART_CONNECTION_TIMEOUT_MS  500  // 3 seconds to declare disconnected
 
 #ifdef __cplusplus
 }

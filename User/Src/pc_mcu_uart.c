@@ -8,6 +8,7 @@
 #include "usart.h"
 #include "cmsis_os.h"
 #include "string.h"
+#include "imu_task.h"
 
 // *** From MCU's perspective ***
 // pc_mcu_tx_data = Data that MCU TRANSMITS to PC (MCU → PC)
@@ -26,19 +27,19 @@ static uart_error_handler_t error_handler = {0};
 // Error handling configuration
 #define MAX_CONSECUTIVE_ERRORS  5      // Max consecutive errors before recovery
 #define RECEIVE_TIMEOUT_MS      2000   // 2 second timeout
-#define RECOVERY_DELAY_MS       100    // Delay during recovery
+#define RECOVERY_DELAY_MS       10    // Delay during recovery
 
 void MCU_TO_PC_DATA_ASSIGN(){
 	// Add some specific test values to MCU transmission
-	pc_mcu_tx_data[0] = 1.2f;
-	pc_mcu_tx_data[1] += 0.001f;
-	pc_mcu_tx_data[2] = 2.2f;
-	pc_mcu_tx_data[3] += 0.001f;
-	pc_mcu_tx_data[4] = 3.2f;
-	pc_mcu_tx_data[5] += 0.001f;
-	pc_mcu_tx_data[6] = 5.2f;
-    pc_mcu_tx_data[7] += 0.001f;
-    pc_mcu_tx_data[8] = 6.2f;
+	pc_mcu_tx_data[0] = imuVelocity[0];
+	pc_mcu_tx_data[1] = imuVelocity[1];
+	pc_mcu_tx_data[2] = imuVelocity[2];
+	pc_mcu_tx_data[3] = gyro[0];
+	pc_mcu_tx_data[4] = gyro[1];
+	pc_mcu_tx_data[5] = gyro[2];
+	pc_mcu_tx_data[6] = imuGravityProjected[0];
+    pc_mcu_tx_data[7] = imuGravityProjected[1];
+    pc_mcu_tx_data[8] = imuGravityProjected[2];
     pc_mcu_tx_data[9] += 0.001f;
     pc_mcu_tx_data[10] = 7.2f;
     pc_mcu_tx_data[11] += 0.001f;
@@ -52,14 +53,11 @@ void MCU_TO_PC_DATA_ASSIGN(){
     pc_mcu_tx_data[19] += 0.001f;
     pc_mcu_tx_data[20] = 12.2f;
     pc_mcu_tx_data[21] += 0.001f;
-    pc_mcu_tx_data[22] = 13.2f;
-    pc_mcu_tx_data[23] += 0.001f;
-    pc_mcu_tx_data[24] = 14.2f;
     
-    // Add error statistics to transmission for debugging
-    pc_mcu_tx_data[22] = 1.2f;        // Send error count to PC
-    pc_mcu_tx_data[23] = 0;   // Send recovery count to PC
-    pc_mcu_tx_data[24] = 729.12f;    // Send total received count to PC
+    // Add UART connection status and error statistics for debugging
+    pc_mcu_tx_data[22] = (float)PC_MCU_UART_Is_Connected();                    // 1.0 = connected, 0.0 = disconnected
+    pc_mcu_tx_data[23] = (float)PC_MCU_UART_Get_Time_Since_Last_Receive();   // Time since last receive (ms)
+    pc_mcu_tx_data[24] = (float)error_handler.crc_errors;                     // Total CRC errors
 }
 
 uint16_t crc16_ccitt(const uint8_t *data, uint16_t len) {
@@ -84,10 +82,10 @@ void UART_Error_Recovery(void) {
     error_handler.error_state = 1;
     
     // 1. Abort any ongoing UART operations
-    HAL_UART_Abort(&huart10);
+//    HAL_UART_Abort(&huart10);
     
     // 2. Clear UART error flags
-    __HAL_UART_CLEAR_FLAG(&huart10, UART_FLAG_ORE | UART_FLAG_FE | UART_FLAG_NE | UART_FLAG_PE);
+//    __HAL_UART_CLEAR_FLAG(&huart10, UART_FLAG_ORE | UART_FLAG_FE | UART_FLAG_NE | UART_FLAG_PE);
     
     // 3. Clear receive buffer
     memset(rx_buffer, 0, PC_TO_MCU_MSG_SIZE);
@@ -112,7 +110,7 @@ void Check_Receive_Timeout(void) {
         
         // Timeout occurred - perform recovery
         UART_Error_Recovery();
-        error_handler.last_receive_time = current_time;  // Reset timeout
+//        error_handler.last_receive_time = current_time;  // Reset timeout
     }
 }
 
@@ -184,5 +182,49 @@ void PC_MCU_UART_TASK(void) {
 
         osDelay(5); // Send every 5ms
     }
+}
+
+// *** UART Communication Status Functions (for buzzer alerts) ***
+
+/**
+ * @brief Check if UART communication is connected/active
+ * @return 1 if connected, 0 if disconnected
+ */
+uint8_t PC_MCU_UART_Is_Connected(void) {
+    uint32_t current_time = HAL_GetTick();
+    
+    // If we never received anything, consider disconnected
+    if (error_handler.last_receive_time == 0) {
+        return 0;
+    }
+    
+    // Check if time since last receive exceeds timeout threshold
+    if ((current_time - error_handler.last_receive_time) > UART_CONNECTION_TIMEOUT_MS) {
+        return 0; // Disconnected
+    }
+    
+    return 1; // Connected
+}
+
+/**
+ * @brief Get time elapsed since last successful UART receive
+ * @return Time in milliseconds since last receive (0 if never received)
+ */
+uint32_t PC_MCU_UART_Get_Time_Since_Last_Receive(void) {
+    uint32_t current_time = HAL_GetTick();
+    
+    if (error_handler.last_receive_time == 0) {
+        return 0xFFFFFFFF; // Never received - return max value
+    }
+    
+    return (current_time - error_handler.last_receive_time);
+}
+
+/**
+ * @brief Get pointer to UART error statistics
+ * @return Pointer to error handler structure
+ */
+uart_error_handler_t* PC_MCU_UART_Get_Error_Stats(void) {
+    return &error_handler;
 }
 

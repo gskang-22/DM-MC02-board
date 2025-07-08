@@ -10,6 +10,7 @@
 #include "cmsis_os.h"
 #include "j60_10.h"
 #include "j60_10motor_task.h"
+#include "pc_mcu_uart.h"
 
 // Private variables
 static uint32_t heartbeat_counter = 0;
@@ -33,6 +34,24 @@ void J60_Motor_Offline_Beep(void) {
       // Short 50ms beep
     osDelay(500);                     // Wait for beep to finish
 }
+
+/**
+ * @brief UART communication disconnected beep function
+ * Plays a distinctive alert pattern when UART communication is lost
+ */
+void BuzzerTask_UART_Disconnected_Beep(void) {
+    // Check if UART is connected
+    if (!PC_MCU_UART_Is_Connected()) {
+        // Play distinctive disconnection alert pattern
+        // Three quick high-pitched beeps
+        for (int i = 0; i < 3; i++) {
+            Buzzer_PlayTone(NOTE_ALERT, 150);  // 150ms high alert tone
+            osDelay(200);                      // 200ms gap between beeps
+        }
+        osDelay(300); // Extra pause after alert sequence
+    }
+}
+
 /**
  * @brief Main buzzer task function (follows PC_MCU_UART_TASK pattern)
  * This function runs the buzzer task loop with 1Hz heartbeat
@@ -56,6 +75,7 @@ void BUZZER_TASK(void) {
         // Play heartbeat beep every 1 second
         BuzzerTask_HeartbeatBeep();
         J60_Motor_Offline_Beep();
+        BuzzerTask_UART_Disconnected_Beep(); // Check UART connection
         
         // Increment heartbeat counter
         heartbeat_counter++;
