@@ -5,6 +5,7 @@
 "./BSP/Src/buzzer.o"
 "./BSP/Src/j60_10.o"
 "./BSP/Src/uart_bsp.o"
+"./Core/Src/dma.o"
 "./Core/Src/fdcan.o"
 "./Core/Src/freertos.o"
 "./Core/Src/gpio.o"

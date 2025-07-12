@@ -4,7 +4,7 @@
 
 // Private variables
 static BuzzerState_t buzzer_state = BUZZER_OFF;
-static uint8_t buzzer_volume = 50; // Default 50% volume
+static uint8_t buzzer_volume = 1; // Default 50% volume
 static uint32_t timer_clock_freq = 200000000; // 200MHz timer clock
 static uint32_t prescaler = 24; // TIM12 prescaler + 1
 

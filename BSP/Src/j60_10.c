@@ -33,7 +33,7 @@ void Enable_J60_Motor(motor_t *motor)
 }
 
 // Initialize a single J60 motor with specified ID and CAN channel
-void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel, float rad_offset)
+void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel, float rad_offset, int8_t direction, float pos_limit_min, float pos_limit_max)
 {
     // Set motor identification
     motor->id = motor_id;
@@ -72,19 +72,34 @@ void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel, float
     motor->para.online = 1;
     motor->para.safety_stop = 0; // Initialize safety stop flag
 
+    // Set direction and offset
     motor->rad_offset = rad_offset;
+    motor->direction = direction; // Set motor direction (1 = forward, -1 = reverse)
+    motor->rad_offset = rad_offset * direction;
+    
+    // Set position limits
+    motor->pos_limit_min = pos_limit_min;
+    motor->pos_limit_max = pos_limit_max;
+    motor->limit_enabled = 1; // Enable position limits by default
 }
 
 // Send control command to a single J60 motor
 void Send_J60_Motor_Command(motor_t *motor)
 {
+    // Apply position limits first
+    float limited_position = Apply_Position_Limits(motor, motor->cmd.pos_set);
+    
+    // Apply direction to motor commands
+    float pos_set_with_direction = limited_position * motor->direction;
+    float vel_set_with_direction = motor->cmd.vel_set * motor->direction;
+    float tor_set_with_direction = motor->cmd.tor_set * motor->direction;
 
-	float pos_set_after_offset = motor->cmd.pos_set - motor->rad_offset;
+	float pos_set_after_offset = pos_set_with_direction - motor->rad_offset;
     uint16_t pos_u16 = MAP_F32_TO_U16(pos_set_after_offset, -40.0f, 40.0f);
-    uint16_t vel_u14 = MAP_F32_TO_U14(motor->cmd.vel_set, -40.0f, 40.0f);
+    uint16_t vel_u14 = MAP_F32_TO_U14(vel_set_with_direction, -40.0f, 40.0f);
     uint16_t kp_u10  = MAP_F32_TO_U10(motor->cmd.kp_set, 0.0f, 1023.0f);
     uint8_t  kd_u8   = MAP_F32_TO_U8(motor->cmd.kd_set, 0.0f, 51.0f);
-    uint16_t torque_u16 = MAP_F32_TO_U16(motor->cmd.tor_set, -40.0f, 40.0f);
+    uint16_t torque_u16 = MAP_F32_TO_U16(tor_set_with_direction, -40.0f, 40.0f);
 
     uint8_t cmd_data[8] = {0};
 
@@ -174,9 +189,13 @@ void J60_Process_Feedback(motor_t *motor, uint8_t *rx_data)
     
     // Convert to float values using J60 ranges
     float pos_before_offset = MAP_U20_TO_F32(pos_raw, J60_POS_MIN, J60_POS_MAX);
-    motor->para.pos = pos_before_offset + motor->rad_offset;  // [-40, +40] rad
-    motor->para.vel = MAP_U20_TO_F32(vel_raw, J60_VEL_MIN, J60_VEL_MAX);  // [-40, +40] rad/s
-    motor->para.tor = MAP_U16_TO_F32(tor_raw, J60_TOR_MIN, J60_TOR_MAX);  // [-40, +40] N·m
+    float vel_raw_float = MAP_U20_TO_F32(vel_raw, J60_VEL_MIN, J60_VEL_MAX);
+    float tor_raw_float = MAP_U16_TO_F32(tor_raw, J60_TOR_MIN, J60_TOR_MAX);
+    
+    // Apply direction to feedback data
+    motor->para.pos = (pos_before_offset + motor->rad_offset) * motor->direction;  // Apply direction to position
+    motor->para.vel = vel_raw_float * motor->direction;  // Apply direction to velocity  
+    motor->para.tor = tor_raw_float * motor->direction;  // Apply direction to torque
     
     // Process temperature
     motor->para.temperature = MAP_U7_TO_F32(temp_raw, J60_TEMP_MIN, J60_TEMP_MAX);  // [-20, +200] °C
@@ -204,6 +223,30 @@ void J60_Cmd_Clear(motor_t *motor){
 	motor->cmd.kp_set = 0.0f;
 	motor->cmd.kd_set = 0.0f;
 	motor->cmd.tor_set = 0.0f;
+}
+
+/**
+ * @brief Apply position limits to the motor command
+ * @param motor Pointer to motor structure
+ * @param position Desired position in radians
+ * @return Limited position value in radians
+ */
+float Apply_Position_Limits(motor_t *motor, float position)
+{
+    // If limits are not enabled, return the original position
+    if (!motor->limit_enabled) {
+        return position;
+    }
+    
+    // Apply limits
+    if (position > motor->pos_limit_max) {
+        return motor->pos_limit_max;
+    } else if (position < motor->pos_limit_min) {
+        return motor->pos_limit_min;
+    }
+    
+    // Position is within limits, return unchanged
+    return position;
 }
 
 /**
@@ -236,4 +279,26 @@ uint8_t J60_Safety_Check(motor_t *motor, float torque_limit)
 void J60_Safety_Reset(motor_t *motor)
 {
     motor->para.safety_stop = 0;
+}
+
+/**
+ * @brief Set position limits for a motor
+ * @param motor Pointer to motor structure
+ * @param min_pos Minimum position limit in radians
+ * @param max_pos Maximum position limit in radians
+ */
+void J60_Set_Position_Limits(motor_t *motor, float min_pos, float max_pos)
+{
+    motor->pos_limit_min = min_pos;
+    motor->pos_limit_max = max_pos;
+}
+
+/**
+ * @brief Enable or disable position limits for a motor
+ * @param motor Pointer to motor structure
+ * @param enable 1 to enable limits, 0 to disable limits
+ */
+void J60_Enable_Position_Limits(motor_t *motor, uint8_t enable)
+{
+    motor->limit_enabled = enable;
 }

@@ -76,16 +76,23 @@ typedef struct
 	motor_fbpara_t para;
 	motor_ctrl_t cmd;
 	float rad_offset;
+	int8_t direction;
+	float pos_limit_min;   // Minimum position limit in radians
+	float pos_limit_max;   // Maximum position limit in radians
+	uint8_t limit_enabled; // Flag to enable/disable position limits
 }motor_t;
 
 void Enable_J60_Motor(motor_t *motor);
-void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel, float rad_offset);
+void Init_J60_Motor(motor_t *motor, int16_t motor_id, uint8_t can_channel, float rad_offset, int8_t direction, float pos_limit_min, float pos_limit_max);
 void Send_J60_Motor_Command(motor_t *motor);
+float Apply_Position_Limits(motor_t *motor, float position);
 void J60_Process_Feedback(motor_t *motor, uint8_t *rx_data);
 void J60_UintsToFloats(uint8_t *data_recv, float *float_data);
 void J60_Enable_Feedback(motor_t *motor, uint8_t *rx_data);
 void J60_Cmd_Clear(motor_t *motor);
 uint8_t J60_Safety_Check(motor_t *motor, float torque_limit);
 void J60_Safety_Reset(motor_t *motor);
+void J60_Set_Position_Limits(motor_t *motor, float min_pos, float max_pos);
+void J60_Enable_Position_Limits(motor_t *motor, uint8_t enable);
 
 #endif /* INC_J60_10_H_ */

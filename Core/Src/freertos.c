@@ -31,6 +31,8 @@
 #include "imu_task.h"
 #include "buzzer_task.h"
 #include "j60_10motor_task.h"
+#include "uart_bsp.h"
+#include "dji_ndj_remote.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,6 +68,9 @@ osStaticThreadDef_t buzzerTaskControlBlock;
 osThreadId J60_10TaskHandle;
 uint32_t J60_10TaskBuffer[ 128 ];
 osStaticThreadDef_t J60_10TaskControlBlock;
+osThreadId DJI_NDJ_TASKHandle;
+uint32_t DJI_NDJ_TASKBuffer[ 128 ];
+osStaticThreadDef_t DJI_NDJ_TASKControlBlock;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -77,6 +82,7 @@ void PC_MCU_ENTRY(void const * argument);
 void ImuTask_Entry(void const * argument);
 void buzzerEntry(void const * argument);
 void J60_10Entry(void const * argument);
+void DJI_NDJ_Entry(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -158,6 +164,10 @@ void MX_FREERTOS_Init(void) {
   /* definition and creation of J60_10Task */
   osThreadStaticDef(J60_10Task, J60_10Entry, osPriorityNormal, 0, 128, J60_10TaskBuffer, &J60_10TaskControlBlock);
   J60_10TaskHandle = osThreadCreate(osThread(J60_10Task), NULL);
+
+  /* definition and creation of DJI_NDJ_TASK */
+  osThreadStaticDef(DJI_NDJ_TASK, DJI_NDJ_Entry, osPriorityBelowNormal, 0, 128, DJI_NDJ_TASKBuffer, &DJI_NDJ_TASKControlBlock);
+  DJI_NDJ_TASKHandle = osThreadCreate(osThread(DJI_NDJ_TASK), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -306,6 +316,32 @@ void J60_10Entry(void const * argument)
     osDelay(1);
   }
   /* USER CODE END J60_10Entry */
+}
+
+/* USER CODE BEGIN Header_DJI_NDJ_Entry */
+/**
+* @brief Function implementing the DJI_NDJ_TASK thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_DJI_NDJ_Entry */
+void DJI_NDJ_Entry(void const * argument)
+{
+  /* USER CODE BEGIN DJI_NDJ_Entry */
+  /* Infinite loop */
+  for(;;)
+  {
+    // Start non-blocking UART reception
+    if(HAL_UART_Receive_IT(&huart5, uart5_rx_buff, BUFF_SIZE) != HAL_OK)
+    {
+      // If reception failed, try again after a short delay
+      osDelay(1);
+    }
+
+    DJI_NDJ_REMOTE_CHECK_ONLINE();
+    osDelay(10);  // Small delay to prevent CPU hogging
+  }
+  /* USER CODE END DJI_NDJ_Entry */
 }
 
 /* Private application code --------------------------------------------------*/

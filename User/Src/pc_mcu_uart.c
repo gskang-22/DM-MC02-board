@@ -15,7 +15,7 @@
 float pc_mcu_tx_data[MCU_TO_PC_FLOATS] = {0};  // MCU sends 25 floats to PC
 
 // pc_mcu_rx_data = Data that MCU RECEIVES from PC (PC → MCU)
-float pc_mcu_rx_data[PC_TO_MCU_FLOATS] = {0};  // MCU receives 7 floats from PC
+float pc_mcu_rx_data[PC_TO_MCU_FLOATS] = {0.2164, 0.83, 0, 0, 0, 0, 0};  // MCU receives 7 floats from PC
 
 // UART buffers (from MCU's perspective)
 uint8_t tx_buffer[MCU_TO_PC_MSG_SIZE];     // MCU transmit buffer: 102 bytes (25 floats + CRC)

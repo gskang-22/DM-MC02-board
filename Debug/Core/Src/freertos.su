@@ -1,8 +1,9 @@
-../Core/Src/freertos.c:93:6:vApplicationGetIdleTaskMemory	24	static
-../Core/Src/freertos.c:106:6:vApplicationGetTimerTaskMemory	24	static
-../Core/Src/freertos.c:120:6:MX_FREERTOS_Init	160	static
-../Core/Src/freertos.c:175:6:StartDefaultTask	16	static
-../Core/Src/freertos.c:243:6:PC_MCU_ENTRY	16	static
-../Core/Src/freertos.c:262:13:ImuTask_Entry	16	static
-../Core/Src/freertos.c:280:6:buzzerEntry	16	static
-../Core/Src/freertos.c:299:6:J60_10Entry	16	static
+../Core/Src/freertos.c:99:6:vApplicationGetIdleTaskMemory	24	static
+../Core/Src/freertos.c:112:6:vApplicationGetTimerTaskMemory	24	static
+../Core/Src/freertos.c:126:6:MX_FREERTOS_Init	184	static
+../Core/Src/freertos.c:185:6:StartDefaultTask	16	static
+../Core/Src/freertos.c:253:6:PC_MCU_ENTRY	16	static
+../Core/Src/freertos.c:272:13:ImuTask_Entry	16	static
+../Core/Src/freertos.c:290:6:buzzerEntry	16	static
+../Core/Src/freertos.c:309:6:J60_10Entry	16	static
+../Core/Src/freertos.c:328:6:DJI_NDJ_Entry	16	static

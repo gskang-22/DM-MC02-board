@@ -41,6 +41,8 @@ typedef struct {
     uint32_t recovery_count;       // Number of times recovery was performed
     uint32_t last_receive_time;    // Last successful receive time
     uint8_t error_state;           // Error state flag
+    uint32_t total_transmissions;  // Total transmission attempts
+    uint32_t skipped_transmissions;// Transmissions skipped due to busy UART
 } uart_error_handler_t;
 
 // Function declarations
