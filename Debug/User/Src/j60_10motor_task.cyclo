@@ -1,2 +1,5 @@
-../User/Src/j60_10motor_task.c:18:6:j60_10_TASK	16
-../User/Src/j60_10motor_task.c:110:6:J60_10_MOTOR_ONLINE_CHECK	4
+../User/Src/j60_10motor_task.c:67:6:j60_10_TASK	47
+../User/Src/j60_10motor_task.c:342:6:J60_10_MOTOR_ONLINE_CHECK	7
+../User/Src/j60_10motor_task.c:380:9:Check_All_Motors_Enabled	6
+../User/Src/j60_10motor_task.c:402:9:Check_Motors_At_Position	7
+../User/Src/j60_10motor_task.c:436:6:Set_Motors_To_Desired_Position	6

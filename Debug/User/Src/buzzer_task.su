@@ -1,4 +1,4 @@
 ../User/Src/buzzer_task.c:23:6:BuzzerTask_HeartbeatBeep	8	static
 ../User/Src/buzzer_task.c:29:6:J60_Motor_Offline_Beep	8	static
-../User/Src/buzzer_task.c:41:6:BuzzerTask_UART_Disconnected_Beep	16	static
-../User/Src/buzzer_task.c:58:6:BUZZER_TASK	32	static
+../User/Src/buzzer_task.c:42:6:BuzzerTask_UART_Disconnected_Beep	16	static
+../User/Src/buzzer_task.c:59:6:BUZZER_TASK	32	static

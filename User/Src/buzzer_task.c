@@ -28,7 +28,8 @@ void BuzzerTask_HeartbeatBeep(void) {
 
 void J60_Motor_Offline_Beep(void) {
     // Check if any motor is offline and alert
-	if (j60_motor[0].para.online == 0 || j60_motor[1].para.online == 0 || j60_motor[2].para.online == 0){
+	if (j60_motor[0].para.online == 0 || j60_motor[1].para.online == 0 || j60_motor[2].para.online == 0 ||
+		j60_motor[3].para.online == 0 || j60_motor[4].para.online == 0 || j60_motor[5].para.online == 0){
 		Buzzer_PlayTone(NOTE_ALERT, 30);  // Alert if any motor is offline
 	}
     osDelay(500);                     // Wait for beep to finish
