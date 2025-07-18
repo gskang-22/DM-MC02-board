@@ -9,6 +9,7 @@
 #include "cmsis_os.h"
 #include "string.h"
 #include "imu_task.h"
+#include "j60_10motor_task.h"
 
 // *** From MCU's perspective ***
 // pc_mcu_tx_data = Data that MCU TRANSMITS to PC (MCU → PC)
@@ -29,6 +30,10 @@ static uart_error_handler_t error_handler = {0};
 #define RECEIVE_TIMEOUT_MS      2000   // 2 second timeout
 #define RECOVERY_DELAY_MS       10    // Delay during recovery
 
+// Round-trip time measurement constants
+#define RTT_EMA_ALPHA           0.2f   // Exponential moving average alpha (0.0-1.0)
+#define PING_SEQUENCE_OFFSET    6      // Offset in pc_mcu_rx/tx_data for ping sequence
+
 void MCU_TO_PC_DATA_ASSIGN(){
 	// Add some specific test values to MCU transmission
 	pc_mcu_tx_data[0] = imuVelocity[0];
@@ -40,24 +45,26 @@ void MCU_TO_PC_DATA_ASSIGN(){
 	pc_mcu_tx_data[6] = imuGravityProjected[0];
     pc_mcu_tx_data[7] = imuGravityProjected[1];
     pc_mcu_tx_data[8] = imuGravityProjected[2];
-    pc_mcu_tx_data[9] += 0.001f;
-    pc_mcu_tx_data[10] = 7.2f;
-    pc_mcu_tx_data[11] += 0.001f;
-    pc_mcu_tx_data[12] = 8.2f;
-    pc_mcu_tx_data[13] += 0.001f;
-    pc_mcu_tx_data[14] = 9.2f;
-    pc_mcu_tx_data[15] += 0.001f;
-    pc_mcu_tx_data[16] = 10.2f;
-    pc_mcu_tx_data[17] += 0.001f;
-    pc_mcu_tx_data[18] = 11.2f;
-    pc_mcu_tx_data[19] += 0.001f;
-    pc_mcu_tx_data[20] = 12.2f;
-    pc_mcu_tx_data[21] += 0.001f;
+    pc_mcu_tx_data[9] = j60_motor[0].para.pos;
+    pc_mcu_tx_data[10] = j60_motor[1].para.pos;
+    pc_mcu_tx_data[11] = j60_motor[2].para.pos;
+    pc_mcu_tx_data[12] = j60_motor[3].para.pos;
+    pc_mcu_tx_data[13] = j60_motor[4].para.pos;
+    pc_mcu_tx_data[14] = j60_motor[5].para.pos;
+    pc_mcu_tx_data[15] = j60_motor[0].para.vel;
+    pc_mcu_tx_data[16] = j60_motor[1].para.vel;
+    pc_mcu_tx_data[17] = j60_motor[2].para.vel;
+    pc_mcu_tx_data[18] = j60_motor[3].para.vel;
+    pc_mcu_tx_data[19] = j60_motor[4].para.vel;
+    pc_mcu_tx_data[20] = j60_motor[5].para.vel;
+    
+    // Send ping sequence number back to PC for round-trip time measurement
+    pc_mcu_tx_data[21] = pc_mcu_rx_data[PING_SEQUENCE_OFFSET];
     
     // Add UART connection status and error statistics for debugging
     pc_mcu_tx_data[22] = (float)PC_MCU_UART_Is_Connected();                    // 1.0 = connected, 0.0 = disconnected
-    pc_mcu_tx_data[23] = (float)PC_MCU_UART_Get_Time_Since_Last_Receive();   // Time since last receive (ms)
-    pc_mcu_tx_data[24] = (float)error_handler.crc_errors;                     // Total CRC errors
+    pc_mcu_tx_data[23] = (float)PC_MCU_UART_Get_Time_Since_Last_Receive();     // Time since last receive (ms)
+    pc_mcu_tx_data[24] = (float)error_handler.round_trip_time;                 // Current round-trip time (ms)
 }
 
 uint16_t crc16_ccitt(const uint8_t *data, uint16_t len) {
@@ -124,8 +131,37 @@ void PC_MCU_UART_Process_Received_Data(void) {
     
     if (received_crc == calculated_crc) {
         // *** CRC SUCCESS ***
+        // Record timestamp when reception completed
+        error_handler.rx_timestamp = HAL_GetTick();
+        
         // Copy received floats to pc_mcu_rx_data[] (MCU received data)
         memcpy(pc_mcu_rx_data, rx_buffer, PC_TO_MCU_FLOATS * 4);
+        
+        // Calculate round-trip time if this is a response to our ping
+        if (pc_mcu_rx_data[PING_SEQUENCE_OFFSET] != 0) {
+            // Calculate round-trip time
+            error_handler.round_trip_time = error_handler.rx_timestamp - error_handler.tx_timestamp;
+            
+            // Update min/max round-trip times
+            if (error_handler.min_round_trip_time == 0 || 
+                error_handler.round_trip_time < error_handler.min_round_trip_time) {
+                error_handler.min_round_trip_time = error_handler.round_trip_time;
+            }
+            
+            if (error_handler.round_trip_time > error_handler.max_round_trip_time) {
+                error_handler.max_round_trip_time = error_handler.round_trip_time;
+            }
+            
+            // Update exponential moving average
+            if (error_handler.avg_round_trip_time == 0) {
+                error_handler.avg_round_trip_time = error_handler.round_trip_time;
+            } else {
+                error_handler.avg_round_trip_time = (uint32_t)(
+                    (1.0f - RTT_EMA_ALPHA) * error_handler.avg_round_trip_time + 
+                    RTT_EMA_ALPHA * error_handler.round_trip_time
+                );
+            }
+        }
         
         // Reset error tracking on successful receive
         error_handler.consecutive_errors = 0;
@@ -156,9 +192,15 @@ void PC_MCU_UART_Process_Received_Data(void) {
 void PC_MCU_UART_TASK(void) {
     // Initialize error handler
     error_handler.last_receive_time = HAL_GetTick();
+    error_handler.min_round_trip_time = 0;
+    error_handler.max_round_trip_time = 0;
+    error_handler.avg_round_trip_time = 0;
     
     // Start first receive (expecting 7 floats from PC)
     HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
+
+    // Ping sequence number for round-trip time measurement
+    static uint32_t ping_sequence = 0;
 
     for (;;) {
         // Check for receive timeout
@@ -166,12 +208,24 @@ void PC_MCU_UART_TASK(void) {
         
         // Prepare data that MCU will TRANSMIT to PC (25 floats)
         MCU_TO_PC_DATA_ASSIGN();
+        
+        // Increment ping sequence number for next transmission
+        ping_sequence++;
+        if (ping_sequence > 65000) ping_sequence = 1; // Avoid overflow and zero
+        
+        // Record timestamp before transmission
+        error_handler.tx_timestamp = HAL_GetTick();
+        
+        // Store ping sequence in the outgoing data
+        pc_mcu_tx_data[PING_SEQUENCE_OFFSET] = (float)ping_sequence;
+        
         memcpy(tx_buffer, pc_mcu_tx_data, MCU_TO_PC_FLOATS * 4);
         uint16_t crc = crc16_ccitt(tx_buffer, MCU_TO_PC_FLOATS * 4);
         tx_buffer[MCU_TO_PC_FLOATS * 4] = crc & 0xFF;
         tx_buffer[MCU_TO_PC_FLOATS * 4 + 1] = (crc >> 8) & 0xFF;
 
         // MCU TRANSMITS message to PC (25 floats)
+        error_handler.total_transmissions++;
         HAL_UART_Transmit_IT(&huart10, tx_buffer, MCU_TO_PC_MSG_SIZE);
 
         // Re-arm UART receive periodically to ensure it's always active
@@ -180,7 +234,7 @@ void PC_MCU_UART_TASK(void) {
             HAL_UART_Receive_IT(&huart10, rx_buffer, PC_TO_MCU_MSG_SIZE);
         }
 
-        osDelay(5); // Send every 5ms
+        osDelay(10); // Send every 10ms
     }
 }
 

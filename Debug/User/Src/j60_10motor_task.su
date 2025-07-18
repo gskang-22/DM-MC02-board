@@ -1,5 +1,5 @@
-../User/Src/j60_10motor_task.c:67:6:j60_10_TASK	96	static
-../User/Src/j60_10motor_task.c:342:6:J60_10_MOTOR_ONLINE_CHECK	24	static
-../User/Src/j60_10motor_task.c:380:9:Check_All_Motors_Enabled	24	static
-../User/Src/j60_10motor_task.c:402:9:Check_Motors_At_Position	48	static
-../User/Src/j60_10motor_task.c:436:6:Set_Motors_To_Desired_Position	48	static
+../User/Src/j60_10motor_task.c:76:6:j60_10_TASK	96	static
+../User/Src/j60_10motor_task.c:385:6:J60_10_MOTOR_ONLINE_CHECK	24	static
+../User/Src/j60_10motor_task.c:423:9:Check_All_Motors_Enabled	24	static
+../User/Src/j60_10motor_task.c:445:9:Check_Motors_At_Position	48	static
+../User/Src/j60_10motor_task.c:479:6:Set_Motors_To_Desired_Position	48	static

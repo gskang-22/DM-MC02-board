@@ -8,6 +8,7 @@
 #include "cmsis_os.h"
 #include "j60_10.h"
 #include <math.h>
+#include <string.h>  // For memcpy
 #include "buzzer.h"
 #include "pc_mcu_uart.h"
 #include "dji_ndj_remote.h"  // Add remote control header
@@ -15,6 +16,10 @@
 motor_t j60_motor[6];
 static float time_counter = 0.0f;  // Time counter for sine wave
 float target_position = 0.0f;
+
+// Motor control gains
+static const float MOTOR_KP = 10.0f;   // Position gain
+static const float MOTOR_KD = 1.0f;    // Damping gain
 
 // Initialization state machine
 typedef enum {
@@ -28,6 +33,10 @@ typedef enum {
 static float current_positions[6] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 static const float POSITION_INCREMENT = 0.006f;  // Position increment per cycle (rad) - 0.003 rad ≈ 0.17° per 10ms cycle
 
+// Safety check parameters
+static uint32_t safety_violation_count[6] = {0, 0, 0, 0, 0, 0};  // Count of consecutive safety violations per motor
+static const uint32_t SAFETY_THRESHOLD_COUNT = 50;  // 50 cycles = 0.5 seconds at 10ms per cycle
+
 // Motor configuration - change this to select which motors to use
 typedef enum {
     USE_MOTORS_123 = 0,  // Use motors 0,1,2 (IDs 1,2,3)
@@ -35,7 +44,7 @@ typedef enum {
     USE_ALL_MOTORS = 2   // Use all motors 0,1,2,3,4,5 (IDs 1,2,3,4,5,6)
 } motor_config_t;
 
-static const motor_config_t MOTOR_CONFIG = USE_MOTORS_123;  // Currently using motors 4,5,6
+static const motor_config_t MOTOR_CONFIG = USE_ALL_MOTORS;  // Currently using motors 4,5,6
 static robot_state_t robot_state = INIT_PHASE;
 static uint32_t state_timer = 0;
 static const float POSITION_TOLERANCE = 0.05f;  // ±0.05 rad tolerance
@@ -70,9 +79,9 @@ void j60_10_TASK(void) {
 	Init_J60_Motor(&j60_motor[0], 1, 1, MOTOR0_INIT_POS, -1, -0.32f, MOTOR0_INIT_POS);  // Motor 0: ID=1, CAN1
 	Init_J60_Motor(&j60_motor[1], 2, 1, MOTOR1_INIT_POS, -1, -1.1f, MOTOR1_INIT_POS);    // Motor 1: ID=2, CAN1
 	Init_J60_Motor(&j60_motor[2], 3, 1, MOTOR2_INIT_POS, -1, MOTOR2_INIT_POS, 0.785f);  // Motor 2: ID=3, CAN1
-	Init_J60_Motor(&j60_motor[3], 4, 1, MOTOR3_INIT_POS, -1, MOTOR3_INIT_POS, 0.32f);  // Motor 3: ID=4, CAN1
-	Init_J60_Motor(&j60_motor[4], 5, 1, MOTOR4_INIT_POS, -1, MOTOR4_INIT_POS, 1.1f);  // Motor 4: ID=5, CAN1
-	Init_J60_Motor(&j60_motor[5], 6, 1, MOTOR5_INIT_POS, -1, -0.785f, MOTOR5_INIT_POS);  // Motor 5: ID=6, CAN1
+	Init_J60_Motor(&j60_motor[3], 4, 2, MOTOR3_INIT_POS, -1, MOTOR3_INIT_POS, 0.32f);  // Motor 3: ID=4, CAN1
+	Init_J60_Motor(&j60_motor[4], 5, 2, MOTOR4_INIT_POS, -1, MOTOR4_INIT_POS, 1.1f);  // Motor 4: ID=5, CAN1
+	Init_J60_Motor(&j60_motor[5], 6, 2, MOTOR5_INIT_POS, -1, -0.785f, MOTOR5_INIT_POS);  // Motor 5: ID=6, CAN1
 	
 	// Initialize current positions to motor initial positions
 	current_positions[0] = MOTOR0_INIT_POS;
@@ -83,17 +92,17 @@ void j60_10_TASK(void) {
 	current_positions[5] = MOTOR5_INIT_POS;
 	
 	Enable_J60_Motor(&j60_motor[0]);
-	osDelay(20);
+	osDelay(100);
 	Enable_J60_Motor(&j60_motor[1]);
-	osDelay(20);
+	osDelay(100);
 	Enable_J60_Motor(&j60_motor[2]);
-	osDelay(20);
+	osDelay(300);
 	Enable_J60_Motor(&j60_motor[3]);
-	osDelay(20);
+	osDelay(300);
 	Enable_J60_Motor(&j60_motor[4]);
-	osDelay(20);
+	osDelay(500);
 	Enable_J60_Motor(&j60_motor[5]);
-	osDelay(20);
+	osDelay(100);
 //	pc_mcu_rx_data[0] = 0.2164f;
 //	pc_mcu_rx_data[1] = 0.83f;
 //	pc_mcu_rx_data[2] = -0.785f;
@@ -130,12 +139,17 @@ void j60_10_TASK(void) {
             }
             
             // Clear commands for active motors only
-            start_motor = (MOTOR_CONFIG == USE_MOTORS_123) ? 0 : 3;
-            end_motor = (MOTOR_CONFIG == USE_MOTORS_123) ? 3 : 6;
-            for (int i = start_motor; i < end_motor; i++) {
-                J60_Cmd_Clear(&j60_motor[i]);
-            }
-            
+//            start_motor = (MOTOR_CONFIG == USE_MOTORS_123) ? 0 : 3;
+//            end_motor = (MOTOR_CONFIG == USE_MOTORS_123) ? 3 : 6;
+//            for (int i = start_motor; i < end_motor; i++) {
+//                J60_Cmd_Clear(&j60_motor[i]);
+//            }
+            J60_Cmd_Clear(&j60_motor[0]);
+            J60_Cmd_Clear(&j60_motor[1]);
+			J60_Cmd_Clear(&j60_motor[2]);
+			J60_Cmd_Clear(&j60_motor[3]);
+			J60_Cmd_Clear(&j60_motor[4]);
+			J60_Cmd_Clear(&j60_motor[5]);
             // Reset pc_mcu_rx_data to initial values
             // pc_mcu_rx_data[0] = MOTOR0_INIT_POS;
             // pc_mcu_rx_data[1] = MOTOR1_INIT_POS;
@@ -165,7 +179,7 @@ void j60_10_TASK(void) {
                 Send_J60_Motor_Command(&j60_motor[4]);
                 Send_J60_Motor_Command(&j60_motor[5]);
             }
-            osDelay(10);
+            osDelay(20);
             continue;
         }
         
@@ -207,7 +221,7 @@ void j60_10_TASK(void) {
                 state_timer++;
                 
                 // Allow 3 seconds for positioning
-                if (state_timer > 300) {
+                if (state_timer > 500) {
                     if (Check_Motors_At_Position()) {
                     	if(dji_remote.right_switch == 2){
                     		robot_state = NORMAL_OPERATION;
@@ -253,16 +267,35 @@ void j60_10_TASK(void) {
                      }
                  }
                  
-                 // Safety check for active motors: Stop motor if torque exceeds 8.0 N·m
+                 // Safety check for active motors: Stop motor if torque exceeds 8.0 N·m for 0.5 seconds
                  {
                      uint8_t safety_error = 0;
-                     int start_motor = (MOTOR_CONFIG == USE_MOTORS_123) ? 0 : 3;
-                     int end_motor = (MOTOR_CONFIG == USE_MOTORS_123) ? 3 : 6;
+                     int start_motor, end_motor;
+                     
+                     if (MOTOR_CONFIG == USE_MOTORS_123) {
+                         start_motor = 0;
+                         end_motor = 3;
+                     } else if (MOTOR_CONFIG == USE_MOTORS_456) {
+                         start_motor = 3;
+                         end_motor = 6;
+                     } else { // USE_ALL_MOTORS
+                         start_motor = 0;
+                         end_motor = 6;
+                     }
                      
                      for (int i = start_motor; i < end_motor; i++) {
                          if (J60_Safety_Check(&j60_motor[i], 8.0f) == 1) {
-                             safety_error = 1;
-                             break;
+                             // Motor is over torque limit - increment violation count
+                             safety_violation_count[i]++;
+                             
+                             // Check if violation has persisted for 0.5 seconds
+                             if (safety_violation_count[i] >= SAFETY_THRESHOLD_COUNT) {
+                                 safety_error = 1;
+                                 break;
+                             }
+                         } else {
+                             // Motor is within safe limits - reset violation count
+                             safety_violation_count[i] = 0;
                          }
                      }
                      
@@ -277,20 +310,30 @@ void j60_10_TASK(void) {
                                  // Generate sine wave: amplitude = 1 rad, period = 2π seconds (frequency ≈ 0.16 Hz)
                  // target_position = (3.142f/2.0f) * sinf(time_counter);
                  
-                 // Set motor commands for active motors only
-                 {
-                     int start_motor = (MOTOR_CONFIG == USE_MOTORS_123) ? 0 : 3;
-                     int end_motor = (MOTOR_CONFIG == USE_MOTORS_123) ? 3 : 6;
-                     
-                     for (int i = start_motor; i < end_motor; i++) {
-                         j60_motor[i].cmd.pos_set = pc_mcu_rx_data[i];  // Position from PC
-                         j60_motor[i].cmd.vel_set = 0.0f;    // No velocity
-                         j60_motor[i].cmd.kp_set = 45.0f;   // Position gain
-                         j60_motor[i].cmd.kd_set = 4.5f;     // Damping gain
-                         j60_motor[i].cmd.tor_set = 0.0f;    // No torque
-                     }
-                 }
-                 break;
+                                   // Set motor commands for active motors only
+                  {
+                      int start_motor, end_motor;
+                      
+                      if (MOTOR_CONFIG == USE_MOTORS_123) {
+                          start_motor = 0;
+                          end_motor = 3;
+                      } else if (MOTOR_CONFIG == USE_MOTORS_456) {
+                          start_motor = 3;
+                          end_motor = 6;
+                      } else { // USE_ALL_MOTORS
+                          start_motor = 0;
+                          end_motor = 6;
+                      }
+                      
+                      for (int i = start_motor; i < end_motor; i++) {
+                          j60_motor[i].cmd.pos_set = pc_mcu_rx_data[i];  // Position from PC
+                          j60_motor[i].cmd.vel_set = 0.0f;    // No velocity
+                          j60_motor[i].cmd.kp_set = MOTOR_KP;   // Position gain
+                          j60_motor[i].cmd.kd_set = MOTOR_KD;     // Damping gain
+                          j60_motor[i].cmd.tor_set = 0.0f;    // No torque
+                      }
+                  }
+                break;
                 
             case ERROR_PHASE:  // Case 99: Error handling
                 // Clear commands for active motors
@@ -470,8 +513,8 @@ void Set_Motors_To_Desired_Position(void) {
         // Set the incremented position
         j60_motor[i].cmd.pos_set = current_positions[i];
         j60_motor[i].cmd.vel_set = 0.0f;
-        j60_motor[i].cmd.kp_set = 45.0f;  // Normal gain for accurate positioning
-        j60_motor[i].cmd.kd_set = 4.5f;   // Normal damping for stability
+        j60_motor[i].cmd.kp_set = 30.0f;  // Normal gain for accurate positioning
+        j60_motor[i].cmd.kd_set = 3.0f;   // Normal damping for stability
         j60_motor[i].cmd.tor_set = 0.0f;
     }
 }

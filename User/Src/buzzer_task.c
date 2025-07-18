@@ -64,9 +64,9 @@ void BUZZER_TASK(void) {
     Buzzer_SetVolume(30); // 30% volume to avoid being too loud
     
     // Startup sound - quick melody to indicate system start
-    const uint32_t startup_freq[] = {NOTE_C4, NOTE_E4, NOTE_G4};
-    const uint32_t startup_dur[] = {100, 100, 150};
-    Buzzer_PlayMelody(startup_freq, startup_dur, 3);
+//    const uint32_t startup_freq[] = {NOTE_C4, NOTE_E4, NOTE_G4};
+//    const uint32_t startup_dur[] = {100, 100, 150};
+//    Buzzer_PlayMelody(startup_freq, startup_dur, 3);
     
     osDelay(500); // Wait before starting heartbeat
     

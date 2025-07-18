@@ -3,6 +3,6 @@
 ../BSP/Src/bsp_fdcan.c:62:9:fdcanx_send_data	64	static
 ../BSP/Src/bsp_fdcan.c:105:9:fdcanx_receive	72	static
 ../BSP/Src/bsp_fdcan.c:141:6:fdcan1_rx_callback	16	static
-../BSP/Src/bsp_fdcan.c:185:6:fdcan2_rx_callback	8	static
-../BSP/Src/bsp_fdcan.c:195:6:fdcan3_rx_callback	8	static
-../BSP/Src/bsp_fdcan.c:205:6:HAL_FDCAN_RxFifo0Callback	16	static
+../BSP/Src/bsp_fdcan.c:185:6:fdcan2_rx_callback	16	static
+../BSP/Src/bsp_fdcan.c:232:6:fdcan3_rx_callback	8	static
+../BSP/Src/bsp_fdcan.c:242:6:HAL_FDCAN_RxFifo0Callback	16	static

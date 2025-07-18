@@ -7,6 +7,7 @@
 #include "bsp_fdcan.h"
 #include "j60_10.h"
 #include <math.h>
+#include "stm32h7xx_hal.h"  // For HAL_GetTick
 
 
 
@@ -155,6 +156,38 @@ void Send_J60_Motor_Command(motor_t *motor)
 // Process J60 motor feedback data according to protocol documentation
 void J60_Process_Feedback(motor_t *motor, uint8_t *rx_data)
 {
+    // Get current time in ms (using HAL_GetTick)
+    uint32_t current_time = HAL_GetTick();
+    
+    // Update frequency tracking
+    if (motor->para.update_count == 0) {
+        // First update - initialize
+        motor->para.last_update_time = current_time;
+        motor->para.update_interval_sum = 0;
+        motor->para.update_frequency = 0.0f;
+    } else {
+        // Calculate interval since last update
+        uint32_t interval = current_time - motor->para.last_update_time;
+        
+        // Update tracking variables
+        motor->para.update_interval_sum += interval;
+        
+        // Calculate frequency every 100 updates
+        if (motor->para.update_count % 100 == 0 && motor->para.update_interval_sum > 0) {
+            // Calculate frequency in Hz (updates per second)
+            motor->para.update_frequency = 100000.0f / (float)motor->para.update_interval_sum;
+            
+            // Reset sum for next calculation
+            motor->para.update_interval_sum = 0;
+        }
+        
+        // Update last update time
+        motor->para.last_update_time = current_time;
+    }
+    
+    // Increment update counter
+    motor->para.update_count++;
+
     // Extract raw values from 8-byte CAN message according to official J60 feedback format:
     // Bit0~Bit19: 当前角度 (20 bits)
     // Bit20~Bit39: 当前角速度 (20 bits) 

@@ -1,5 +1,6 @@
 User/Src/j60_10motor_task.o: ../User/Src/j60_10motor_task.c \
  C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/j60_10motor_task.h \
+ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/j60_10.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../Core/Inc/FreeRTOSConfig.h \
@@ -17,7 +18,6 @@ User/Src/j60_10motor_task.o: ../User/Src/j60_10motor_task.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/j60_10.h \
  C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/buzzer.h \
  C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/pc_mcu_uart.h \
  C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/dji_ndj_remote.h \
@@ -59,6 +59,7 @@ User/Src/j60_10motor_task.o: ../User/Src/j60_10motor_task.c \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
  ../Core/Inc/usart.h ../Core/Inc/main.h
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/j60_10motor_task.h:
+C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/j60_10.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -76,7 +77,6 @@ C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/j60_10motor_
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/j60_10.h:
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/BSP/Inc/buzzer.h:
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/pc_mcu_uart.h:
 C:/Users/YI\ MING/Desktop/MC02_template2/CtrBoard-H7_FDCAN/User/Inc/dji_ndj_remote.h:

@@ -58,6 +58,11 @@ typedef struct
 	int online;
 	uint8_t enable_failed;
 	uint8_t safety_stop; // Safety stop flag when torque exceeds limit
+	// Update frequency tracking
+	uint32_t update_count;       // Count of updates received
+	uint32_t last_update_time;   // Timestamp of last update (in ms)
+	uint32_t update_interval_sum; // Sum of intervals between updates (in ms)
+	float update_frequency;      // Calculated update frequency (Hz)
 }motor_fbpara_t;
 
 typedef struct

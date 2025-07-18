@@ -43,6 +43,14 @@ typedef struct {
     uint8_t error_state;           // Error state flag
     uint32_t total_transmissions;  // Total transmission attempts
     uint32_t skipped_transmissions;// Transmissions skipped due to busy UART
+    
+    // UART transmission delay measurement
+    uint32_t tx_timestamp;         // Timestamp when transmission started
+    uint32_t rx_timestamp;         // Timestamp when reception completed
+    uint32_t round_trip_time;      // Round-trip time in milliseconds
+    uint32_t avg_round_trip_time;  // Average round-trip time (exponential moving average)
+    uint32_t min_round_trip_time;  // Minimum round-trip time observed
+    uint32_t max_round_trip_time;  // Maximum round-trip time observed
 } uart_error_handler_t;
 
 // Function declarations
