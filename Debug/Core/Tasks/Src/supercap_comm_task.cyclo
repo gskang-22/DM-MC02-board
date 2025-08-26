@@ -1,0 +1,3 @@
+../Core/Tasks/Src/supercap_comm_task.c:22:6:supercap_comm_task	9
+../Core/Tasks/Src/supercap_comm_task.c:72:6:txHeaderConfig	1
+../Core/Tasks/Src/supercap_comm_task.c:83:7:supercapISR	1

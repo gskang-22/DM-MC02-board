@@ -1,0 +1,4 @@
+../Core/BSP/Src/bsp_hall.c:17:6:hall_enable	4	static
+../Core/BSP/Src/bsp_hall.c:22:6:hall_disable	4	static
+../Core/BSP/Src/bsp_hall.c:28:6:hall_int	8	static
+../Core/BSP/Src/bsp_hall.c:43:9:check_yaw	8	static

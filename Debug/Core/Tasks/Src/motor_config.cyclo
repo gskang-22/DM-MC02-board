@@ -1,0 +1,10 @@
+../Core/Tasks/Src/motor_config.c:50:6:motor_calib_task	6
+../Core/Tasks/Src/motor_config.c:204:9:lk_set_pid	4
+../Core/Tasks/Src/motor_config.c:221:6:set_motor_config	7
+../Core/Tasks/Src/motor_config.c:352:6:dm_set_motor_config	1
+../Core/Tasks/Src/motor_config.c:361:6:dm_set_pitch_motor	1
+../Core/Tasks/Src/motor_config.c:389:6:dm_set_yaw_motor	1
+../Core/Tasks/Src/motor_config.c:418:6:config_motors	2
+../Core/Tasks/Src/motor_config.c:660:6:bz_buzzer	3
+../Core/Tasks/Src/motor_config.c:673:6:motor_temp_bz	3
+../Core/Tasks/Src/motor_config.c:691:10:check_motors	22

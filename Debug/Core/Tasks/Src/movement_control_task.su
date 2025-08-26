@@ -1,0 +1,5 @@
+../Core/Tasks/Src/movement_control_task.c:54:6:movement_control_task	32	static
+../Core/Tasks/Src/movement_control_task.c:128:6:chassis_MCU_send_CAN	4	static
+../Core/Tasks/Src/movement_control_task.c:141:6:chassis_motion_control	128	static
+../Core/Tasks/Src/movement_control_task.c:225:6:level_config	32	static
+../Core/Tasks/Src/movement_control_task.c:376:7:rpm_ramp	56	static

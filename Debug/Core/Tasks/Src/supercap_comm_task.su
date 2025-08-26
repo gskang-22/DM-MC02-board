@@ -1,0 +1,3 @@
+../Core/Tasks/Src/supercap_comm_task.c:22:6:supercap_comm_task	64	static,ignoring_inline_asm
+../Core/Tasks/Src/supercap_comm_task.c:72:6:txHeaderConfig	16	static
+../Core/Tasks/Src/supercap_comm_task.c:83:7:supercapISR	24	static

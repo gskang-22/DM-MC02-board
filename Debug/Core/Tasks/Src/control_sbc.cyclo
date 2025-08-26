@@ -1,0 +1,13 @@
+../Core/Tasks/Src/control_sbc.c:43:6:nx_control_input	1
+../Core/Tasks/Src/control_sbc.c:56:6:nx_remote_chassis_input	5
+../Core/Tasks/Src/control_sbc.c:81:6:nx_gimbal_input	3
+../Core/Tasks/Src/control_sbc.c:89:6:nx_launcher_input	6
+../Core/Tasks/Src/control_sbc.c:106:6:sbc_control_input	4
+../Core/Tasks/Src/control_sbc.c:134:6:aimbot_pid_init	1
+../Core/Tasks/Src/control_sbc.c:150:6:sbc_gimbal_control_input	10
+../Core/Tasks/Src/control_sbc.c:189:6:sbc_gimbal_process_yolo	5
+../Core/Tasks/Src/control_sbc.c:211:6:sbc_gimbal_process_norm	6
+../Core/Tasks/Src/control_sbc.c:249:6:sbc_gimbal_process_set_ang	3
+../Core/Tasks/Src/control_sbc.c:261:6:sbc_gimbal_process_turn_ang	3
+../Core/Tasks/Src/control_sbc.c:276:6:sbc_chassis_control_input	10
+../Core/Tasks/Src/control_sbc.c:338:6:sbc_launcher_control_input	21

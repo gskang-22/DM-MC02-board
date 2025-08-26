@@ -1,0 +1,5 @@
+../Core/Tasks/Src/mahony_filter.c:13:6:RotationMatrix_update	56	static
+../Core/Tasks/Src/mahony_filter.c:40:6:mahony_input	40	static
+../Core/Tasks/Src/mahony_filter.c:47:6:mahony_update	56	static
+../Core/Tasks/Src/mahony_filter.c:123:6:mahony_output	16	static
+../Core/Tasks/Src/mahony_filter.c:132:6:mahony_init	24	static

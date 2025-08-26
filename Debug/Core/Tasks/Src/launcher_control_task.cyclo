@@ -1,0 +1,6 @@
+../Core/Tasks/Src/launcher_control_task.c:51:6:launcher_control_task	2
+../Core/Tasks/Src/launcher_control_task.c:117:10:check_overheat	10
+../Core/Tasks/Src/launcher_control_task.c:201:6:flywheel_control	16
+../Core/Tasks/Src/launcher_control_task.c:273:6:launcher_control	24
+../Core/Tasks/Src/launcher_control_task.c:548:6:guidance_flywheel	15
+../Core/Tasks/Src/launcher_control_task.c:625:6:guidance_feeder	36

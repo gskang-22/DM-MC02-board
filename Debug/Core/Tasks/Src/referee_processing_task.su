@@ -1,0 +1,2 @@
+../Core/Tasks/Src/referee_processing_task.c:54:6:HAL_UART_AbortCpltCallback	16	static
+../Core/Tasks/Src/referee_processing_task.c:64:6:referee_processing_task	32	static

@@ -1,0 +1,14 @@
+../Drivers/CMSIS/Include/core_cm7.h:2156:34:__NVIC_SystemReset	1
+../Core/Tasks/Src/control_input_task.c:48:6:control_input_task	16
+../Core/Tasks/Src/control_input_task.c:150:7:chassis_center_yaw	2
+../Core/Tasks/Src/control_input_task.c:161:6:chassis_centering_config	13
+../Core/Tasks/Src/control_input_task.c:263:6:chassis_set_ctrl	1
+../Core/Tasks/Src/control_input_task.c:270:6:chassis_kill_ctrl	1
+../Core/Tasks/Src/control_input_task.c:276:9:gimbal_aim_at_damaged_plate	7
+../Core/Tasks/Src/control_input_task.c:314:6:control_reset	1
+../Core/Tasks/Src/control_input_task.c:329:6:control_mode_change	18
+../Core/Tasks/Src/control_input_task.c:404:6:gimbal_turn_ang	3
+../Core/Tasks/Src/control_input_task.c:421:6:gimbal_set_ang	3
+../Core/Tasks/Src/control_input_task.c:432:6:set_gear	7
+../Core/Tasks/Src/control_input_task.c:473:6:chassis_yaw_pid_init	1
+../Core/Tasks/Src/control_input_task.c:489:6:dbus_reset	3

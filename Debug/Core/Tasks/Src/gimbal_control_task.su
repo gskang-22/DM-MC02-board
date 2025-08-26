@@ -1,0 +1,9 @@
+../Core/Tasks/Src/gimbal_control_task.c:61:6:gimbal_control_task	32	static
+../Core/Tasks/Src/gimbal_control_task.c:112:6:gimbal_control	16	static
+../Core/Tasks/Src/gimbal_control_task.c:121:6:pitch_control	16	static
+../Core/Tasks/Src/gimbal_control_task.c:137:6:calculate_lead_screw_pitch	40	static
+../Core/Tasks/Src/gimbal_control_task.c:161:9:limit_pitch	24	static
+../Core/Tasks/Src/gimbal_control_task.c:174:6:calculate_direct_pitch	24	static
+../Core/Tasks/Src/gimbal_control_task.c:259:6:calculate_linkage_pitch	24	static
+../Core/Tasks/Src/gimbal_control_task.c:295:6:yaw_control	24	static
+../Core/Tasks/Src/gimbal_control_task.c:363:6:gimbal_angle_control	16	static
