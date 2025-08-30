@@ -8,7 +8,7 @@
 #ifndef BSP_INC_BOARD_SETTINGS_H_
 #define BSP_INC_BOARD_SETTINGS_H_
 
-#define DBUS_UART 			&huart5
+#define DBUS_UART 			&huart10
 #define SBC_UART			&huart7
 #define REFEREE_UART		&huart1
 #define REMOTE_DATA_SIZE 	18

@@ -11,7 +11,7 @@ RM := rm -rf
 -include sources.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
 -include Drivers/STM32H7xx_HAL_Driver/Src/subdir.mk
 -include Core/Tasks/Src/subdir.mk
@@ -40,34 +40,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := DM-MC02
+BUILD_ARTIFACT_NAME := DM-MC02-board
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-DM-MC02.elf \
+DM-MC02-board.elf \
 
 MAP_FILES += \
-DM-MC02.map \
+DM-MC02-board.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-DM-MC02.list \
+DM-MC02-board.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: DM-MC02.elf secondary-outputs
+main-build: DM-MC02-board.elf secondary-outputs
 
 # Tool invocations
-DM-MC02.elf DM-MC02.map: $(OBJS) $(USER_OBJS) C:\Users\gskan\STM32CubeIDE\workspace_1.18.1\DM-MC02\STM32H723VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "DM-MC02.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\gskan\STM32CubeIDE\workspace_1.18.1\DM-MC02\STM32H723VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DM-MC02.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+DM-MC02-board.elf DM-MC02-board.map: $(OBJS) $(USER_OBJS) C:\Users\gskan\STM32CubeIDE\RoboMaster\DM-MC02-board\STM32H723VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "DM-MC02-board.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\gskan\STM32CubeIDE\RoboMaster\DM-MC02-board\STM32H723VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DM-MC02-board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -76,14 +76,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-DM-MC02.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "DM-MC02.list"
+DM-MC02-board.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "DM-MC02-board.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) DM-MC02.elf DM-MC02.list DM-MC02.map default.size.stdout
+	-$(RM) DM-MC02-board.elf DM-MC02-board.list DM-MC02-board.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

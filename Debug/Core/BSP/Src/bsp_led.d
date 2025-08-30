@@ -1,5 +1,5 @@
 Core/BSP/Src/bsp_led.o: ../Core/BSP/Src/bsp_led.c \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_led.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_led.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  ../Core/Inc/stm32h7xx_hal_conf.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h \
@@ -40,7 +40,7 @@ Core/BSP/Src/bsp_led.o: ../Core/BSP/Src/bsp_led.c \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
  ../Core/Inc/tim.h ../Core/Inc/main.h
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_led.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_led.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../Core/Inc/stm32h7xx_hal_conf.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h:

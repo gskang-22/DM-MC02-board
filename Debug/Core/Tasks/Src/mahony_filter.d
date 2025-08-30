@@ -1,5 +1,5 @@
 Core/Tasks/Src/mahony_filter.o: ../Core/Tasks/Src/mahony_filter.c \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/Tasks/Inc/mahony_filter.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/Tasks/Inc/mahony_filter.h \
  ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h \
  ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h \
  ../Drivers/CMSIS/Include/core_cm7.h \
@@ -40,7 +40,7 @@ Core/Tasks/Src/mahony_filter.o: ../Core/Tasks/Src/mahony_filter.c \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
  ../Core/Inc/arm_math.h ../Drivers/CMSIS/Include/core_cm4.h
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/Tasks/Inc/mahony_filter.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/Tasks/Inc/mahony_filter.h:
 ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h:
 ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h:
 ../Drivers/CMSIS/Include/core_cm7.h:

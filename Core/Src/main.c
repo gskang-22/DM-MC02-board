@@ -107,12 +107,12 @@ int main(void)
   MX_RNG_Init();
   MX_FDCAN3_Init();
   MX_SPI2_Init();
+  MX_USART10_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
-  /* Init scheduler */
-  osKernelInitialize();  /* Call init function for freertos objects (in cmsis_os2.c) */
+  /* Call init function for freertos objects (in cmsis_os2.c) */
   MX_FREERTOS_Init();
 
   /* Start scheduler */

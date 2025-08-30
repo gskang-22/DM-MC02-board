@@ -15,13 +15,11 @@
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:644:19:prvGetNextExpireTime	3
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:670:19:prvSampleTimeNow	2
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:693:19:prvInsertTimerInActiveList	5
-../Middlewares/Third_Party/FreeRTOS/Source/timers.c:734:13:prvProcessReceivedCommands	15
+../Middlewares/Third_Party/FreeRTOS/Source/timers.c:734:13:prvProcessReceivedCommands	13
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:882:13:prvSwitchTimerLists	5
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:941:13:prvCheckForValidListAndQueue	3
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:992:12:xTimerIsTimerActive	3
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:1017:7:pvTimerGetTimerID	2
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:1034:6:vTimerSetTimerID	2
-../Middlewares/Third_Party/FreeRTOS/Source/timers.c:1050:13:xTimerPendFunctionCallFromISR	1
-../Middlewares/Third_Party/FreeRTOS/Source/timers.c:1074:13:xTimerPendFunctionCall	2
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:1103:14:uxTimerGetTimerNumber	1
 ../Middlewares/Third_Party/FreeRTOS/Source/timers.c:1113:7:vTimerSetTimerNumber	1

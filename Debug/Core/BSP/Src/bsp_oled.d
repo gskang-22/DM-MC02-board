@@ -1,5 +1,5 @@
 Core/BSP/Src/bsp_oled.o: ../Core/BSP/Src/bsp_oled.c \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_oled.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_oled.h \
  ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h \
  ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h \
  ../Drivers/CMSIS/Include/core_cm7.h \
@@ -40,8 +40,8 @@ Core/BSP/Src/bsp_oled.o: ../Core/BSP/Src/bsp_oled.c \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
  ../Core/Inc/spi.h ../Core/Inc/main.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/oledfont.h
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_oled.h:
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/oledfont.h
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_oled.h:
 ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h:
 ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h:
 ../Drivers/CMSIS/Include/core_cm7.h:
@@ -83,4 +83,4 @@ C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_oled.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
 ../Core/Inc/spi.h:
 ../Core/Inc/main.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/oledfont.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/oledfont.h:

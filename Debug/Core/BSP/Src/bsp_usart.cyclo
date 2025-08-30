@@ -1,0 +1,8 @@
+../Core/BSP/Src/bsp_usart.c:20:6:init_xvr_usart	1
+../Core/BSP/Src/bsp_usart.c:24:6:xvr_half_cplt_isr	1
+../Core/BSP/Src/bsp_usart.c:33:6:xvr_full_cplt_isr	1
+../Core/BSP/Src/bsp_usart.c:37:19:xvr_usart_start	5
+../Core/BSP/Src/bsp_usart.c:96:19:ref_usart_send	1
+../Core/BSP/Src/bsp_usart.c:100:19:ref_usart_start	5
+../Core/BSP/Src/bsp_usart.c:153:6:ref_half_cplt_isr	3
+../Core/BSP/Src/bsp_usart.c:168:6:ref_full_cplt_isr	3

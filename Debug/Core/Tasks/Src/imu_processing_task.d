@@ -1,6 +1,6 @@
 Core/Tasks/Src/imu_processing_task.o: \
  ../Core/Tasks/Src/imu_processing_task.c \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/board_lib.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/board_lib.h \
  ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h \
  ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h \
  ../Drivers/CMSIS/Include/core_cm7.h \
@@ -40,7 +40,7 @@ Core/Tasks/Src/imu_processing_task.o: \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../Core/Inc/FreeRTOSConfig.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
@@ -50,44 +50,45 @@ Core/Tasks/Src/imu_processing_task.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- ../Core/Inc/usart.h ../Core/Inc/main.h ../Core/Inc/arm_math.h \
- ../Drivers/CMSIS/Include/core_cm4.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_queue.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/board_settings.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/Tasks/Inc/typedefs.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_dbus_input.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_usart.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_referee.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/referee_msgs.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_can.h \
+ ../Core/Inc/usart.h ../Core/Inc/main.h ../Core/Inc/arm_math.h \
+ ../Drivers/CMSIS/Include/core_cm4.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_queue.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/board_settings.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/Tasks/Inc/typedefs.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_dbus_input.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_usart.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_referee.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/referee_msgs.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_can.h \
  ../Core/Inc/fdcan.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_led.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_oled.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_led.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_oled.h \
  ../Core/Inc/spi.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_imu.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_buzzer.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_imu.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_buzzer.h \
  ../Core/Inc/tim.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_gpio.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_usb_redir.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_micros_timer.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_damiao.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_gpio.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_usb_redir.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_micros_timer.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_damiao.h \
  ../Core/Inc/main.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/board_lib.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/CRC8_CRC16.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_imu.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/robot_config/robot_config.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/robot_config/robot_config_kirbee.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/Tasks/Inc/motor_config.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/robot_config/hud_kirbee.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/hud_constants.h \
- C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/Tasks/Inc/imu_processing_task.h
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/board_lib.h:
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/board_lib.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/CRC8_CRC16.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_imu.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/robot_config/robot_config.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/robot_config/robot_config_kirbee.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/Tasks/Inc/motor_config.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/robot_config/hud_kirbee.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/hud_constants.h \
+ C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/Tasks/Inc/imu_processing_task.h
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/board_lib.h:
 ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h:
 ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h:
 ../Drivers/CMSIS/Include/core_cm7.h:
@@ -127,7 +128,7 @@ C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/board_lib.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
-../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -137,42 +138,43 @@ C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/board_lib.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
-../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 ../Core/Inc/usart.h:
 ../Core/Inc/main.h:
 ../Core/Inc/arm_math.h:
 ../Drivers/CMSIS/Include/core_cm4.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_queue.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/board_settings.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/Tasks/Inc/typedefs.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_dbus_input.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_usart.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_referee.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/referee_msgs.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_can.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_queue.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/board_settings.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/Tasks/Inc/typedefs.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_dbus_input.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_usart.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_referee.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/referee_msgs.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_can.h:
 ../Core/Inc/fdcan.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_led.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_oled.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_led.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_oled.h:
 ../Core/Inc/spi.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_imu.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_buzzer.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_imu.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_buzzer.h:
 ../Core/Inc/tim.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_gpio.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_usb_redir.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_micros_timer.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_damiao.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_gpio.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_usb_redir.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_micros_timer.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_damiao.h:
 ../Core/Inc/main.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/board_lib.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/CRC8_CRC16.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/bsp_imu.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/robot_config/robot_config.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/robot_config/robot_config_kirbee.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/Tasks/Inc/motor_config.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/robot_config/hud_kirbee.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/BSP/Inc/hud_constants.h:
-C:/Users/gskan/STM32CubeIDE/workspace_1.18.1/DM-MC02/Core/Tasks/Inc/imu_processing_task.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/board_lib.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/CRC8_CRC16.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/bsp_imu.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/robot_config/robot_config.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/robot_config/robot_config_kirbee.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/Tasks/Inc/motor_config.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/robot_config/hud_kirbee.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/BSP/Inc/hud_constants.h:
+C:/Users/gskan/STM32CubeIDE/RoboMaster/DM-MC02-board/Core/Tasks/Inc/imu_processing_task.h:
